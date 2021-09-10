@@ -183,9 +183,9 @@ def WorkCycle(mode, grill_platform, adc_device, display_device, dist_device):
 	# Safety Controls
 	if ((mode == 'Startup') or (mode == 'Reignite')):
 		#control = ReadControl()  # Read Modify Write
-		control['safety']['startuptemp'] = max((GrillTemp*0.9), settings['safety']['minstartuptemp'])
-		control['safety']['startuptemp'] = min(control['safety']['startuptemp'], settings['safety']['maxstartuptemp'])
-		control['safety']['afterstarttemp'] = GrillTemp
+		control['safety']['startuptemp'] = int(max((GrillTemp*0.9), settings['safety']['minstartuptemp']))
+		control['safety']['startuptemp'] = int(min(control['safety']['startuptemp'], settings['safety']['maxstartuptemp']))
+		control['safety']['afterstarttemp'] = int(GrillTemp)
 		WriteControl(control)
 	# Check if the temperature of the grill dropped below the startuptemperature 
 	elif ((mode == 'Hold') or (mode == 'Smoke')):
@@ -373,15 +373,15 @@ def WorkCycle(mode, grill_platform, adc_device, display_device, dist_device):
 		# Check for button input event
 		display_device.EventDetect()
 		
-		# Send Current Status / Temperature Data to Display Device every 1 second
-		if(now - displaytoggletime > 1):
+		# Send Current Status / Temperature Data to Display Device every 0.5 second (Display Refresh)
+		if(now - displaytoggletime > 0.5):
 			status_data = GetStatus(grill_platform, control, settings, pelletdb)
 			display_device.DisplayStatus(in_data, status_data)
 			displaytoggletime = time.time() # Reset the displaytoggletime to current time
 
 		# Safety Controls
 		if ((mode == 'Startup') or (mode == 'Reignite')):
-			control['safety']['afterstarttemp'] = AvgGT
+			control['safety']['afterstarttemp'] = int(AvgGT)
 		elif ((mode == 'Hold') or (mode == 'Smoke')):
 			if (AvgGT < control['safety']['startuptemp']):
 				if(control['safety']['reigniteretries'] == 0):
@@ -481,7 +481,7 @@ def WorkCycle(mode, grill_platform, adc_device, display_device, dist_device):
 			WriteLog(event)
 	if ((mode == 'Startup') or (mode == 'Reignite')):
 		#control = ReadControl()  # Read Modify Write
-		control['safety']['afterstarttemp'] = AvgGT
+		control['safety']['afterstarttemp'] = int(AvgGT)
 		WriteControl(control)
 	event = mode + ' mode ended.'
 	WriteLog(event)
@@ -1128,16 +1128,12 @@ if(settings['globals']['debug_mode'] == True):
 	print(event)
 	WriteLog(event)
 
-# Initialize Temp files
-#  Remove existing control file
-if(settings['globals']['debug_mode'] == True):
-	event = '* Removing /tmp/control.json.'
-	print(event)
-	WriteLog(event)
-os.system('rm /tmp/control.json')
-
-#  Create /tmp/control.json file
-control = ReadControl()
+#  Flush Redis DB and create JSON structure
+control = ReadControl(flush=True)
+#  Delete Redis DB for history / current
+ReadHistory(0, flushhistory=True)
+event = 'Flushing Redis DB and creating new control structure'
+WriteLog(event)
 
 #  Create /logs/event.log file
 event = 'Control Script Starting Up.'
@@ -1206,7 +1202,7 @@ while True:
 				control['status'] = 'inactive'
 				event = "Stop Mode Started."
 				# Reset Control to Defaults
-				control = DefaultControl()
+				control = ReadControl(flush=True)
 				control['updated'] = False
 				WriteControl(control)
 			else:
@@ -1218,9 +1214,8 @@ while True:
 				control['updated'] = False
 				WriteControl(control)
 
-			curfile = open("/tmp/current.log", "w") # Write current data to current.log file
-			curfile.write('00:00:0 0 0 0 0 0 0')
-			curfile.close()
+			ReadCurrent(zero_out=True)  # Zero out the current values
+
 			WriteLog(event)
 
 		#	Startup (startup sequence)
@@ -1228,14 +1223,13 @@ while True:
 			if(grill_platform.GetInputStatus() == 1):
 				event = "Warning: PiFire is set to OFF. This doesn't prevent startup, but this means the switch won't behave as normal."
 				WriteLog(event)
-			#settings = ReadSettings()
+			settings = ReadSettings()
 			if(settings['history_page']['clearhistoryonstart'] == True):
 				if(settings['globals']['debug_mode'] == True):
 					event = '* Clearing History and Current Log on Startup Mode.'
 					print(event)
 					WriteLog(event)
-				os.system('rm /tmp/history.log')
-				os.system('rm /tmp/current.log')
+				ReadHistory(0, flushhistory=True)  # Clear all history 
 			WorkCycle('Startup', grill_platform, adc_device, display_device, dist_device)
 			control = ReadControl()
 			# If mode is Startup, then assume you can transition into smoke mode

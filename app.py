@@ -272,8 +272,7 @@ def historypage(action=None):
 			if('clearhistory' in response):
 				if(response['clearhistory'] == 'true'):
 					WriteLog('Clearing History Log.')
-					os.system('rm /tmp/history.log')
-					os.system('rm /tmp/current.log')
+					ReadHistory(0, flushhistory=True)
 
 	elif (request.method == 'GET') and (action == 'export'):
 		data_list = ReadHistory((settings['history_page']['minutes'] * 20))
@@ -969,8 +968,7 @@ def adminpage(action=None):
 		if('clearhistory' in response):
 			if(response['clearhistory']=='true'):
 				WriteLog('Clearing History Log.')
-				os.system('rm /tmp/history.log')
-				os.system('rm /tmp/current.log')
+				ReadHistory(0, flushhistory=True)
 
 		if('clearevents' in response):
 			if(response['clearevents']=='true'):
@@ -985,10 +983,9 @@ def adminpage(action=None):
 		if('factorydefaults' in response):
 			if(response['factorydefaults']=='true'):
 				WriteLog('Resetting Settings, Control, History to factory defaults.')
-				os.system('rm /tmp/history.log')
-				os.system('rm /tmp/current.log')
+				ReadHistory(0, flushhistory=True)
+				ReadControl(flush=True)
 				os.system('rm settings.json')
-				os.system('rm /tmp/control.json')
 				settings = DefaultSettings()
 				control = DefaultControl()
 				WriteSettings(settings)

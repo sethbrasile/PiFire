@@ -16,10 +16,13 @@ import time
 import datetime
 import os
 import json
+import redis
 
 # *****************************************
 # Functions
 # *****************************************
+
+cmdsts = redis.StrictRedis('localhost', 6379, charset="utf-8", decode_responses=True)  # Setup Command / Status database connection
 
 def DefaultSettings():
 	settings = {}
@@ -119,14 +122,13 @@ def DefaultSettings():
 	return settings
 
 def DefaultControl():
-
-	settings = ReadSettings()
-
 	control = {}
 
 	control['updated'] = True
 
 	control['mode'] = 'Stop'
+
+	settings = ReadSettings()
 
 	if(settings['smoke_plus']['enabled'] == True):
 		control['s_plus'] = True # Smoke-Plus Feature Enable/Disable
@@ -140,6 +142,13 @@ def DefaultControl():
 	control['status'] = ''
 
 	control['probe_profile_update'] = False 
+
+	control['safety'] = {
+		'startuptemp' : 0, # Set by control function at startup
+		'afterstarttemp' : 0, # Set by control function during startup
+		'reigniteretries' : settings['safety']['reigniteretries'], # Set by user to attempt a re-ignite when the grill drops below a certain temp
+		'reignitelaststate' : 'Smoke' # Set by control function to remember the last state we were in when the temp dropped below safety levels 
+	}
 
 	control['setpoints'] = {
 		'grill' : 0,
@@ -172,20 +181,14 @@ def DefaultControl():
 		'change' : False,
 		'output' : '',
 		'state' : '',
-		'current' : {
+	}
+
+	control['manual']['current'] = {
 			'fan' : 1,
 			'auger' : 1,
 			'igniter' : 1,
 			'power' : 1
 		}
-	}
-
-	control['safety'] = {
-		'startuptemp' : 0, # Set by control function at startup
-		'afterstarttemp' : 0, # Set by control function during startup
-		'reigniteretries' : settings['safety']['reigniteretries'], # Set by user to attempt a re-ignite when the grill drops below a certain temp
-		'reignitelaststate' : 'Smoke' # Set by control function to remember the last state we were in when the temp dropped below safety levels 
-	}
 
 	return(control)
 
@@ -317,39 +320,128 @@ def DefaultProbeProfiles():
 	}
 	return probe_profiles
 
-def ReadControl():
-	# *****************************************
-	# Read Control From JSON File
-	# *****************************************
+def ReadControl(flush=False):
+	global cmdsts
 
-	try:
-		json_data_file = os.fdopen(os.open('/tmp/control.json', os.O_RDONLY))
-		#json_data_file = open("/tmp/control.json", "r")
-		json_data_string = json_data_file.read()
-		control = json.loads(json_data_string)
-		json_data_file.close()
-	except(IOError, OSError):
-		# Issue with reading file, so create one/write new one
+	if flush:
+		# Remove all control structures in Redis DB (not history or current)
+		cmdsts.delete('control:general')
+		cmdsts.delete('control:safety')
+		cmdsts.delete('control:setpoints')
+		cmdsts.delete('control:notify_req')
+		cmdsts.delete('control:notify_data')
+		cmdsts.delete('control:timer')
+		cmdsts.delete('control:manual')
+
 		control = DefaultControl()
 		WriteControl(control)
-		return(control)
-	except(ValueError):
-		# A ValueError Exception occurs when multiple accesses collide, this code attempts a retry.
-		event = 'ERROR: Value Error Exception - JSONDecodeError reading control.json'
-		WriteLog(event)
-		json_data_file.close()
-		# Retry Reading Control 
-		control = ReadControl() 
+	else: 
+		control = {}
+
+		control['updated'] = True if cmdsts.hget('control:general', 'updated') == 'true' else False
+
+		control['mode'] = str(cmdsts.hget('control:general', 'mode'))
+
+		control['s_plus'] = True if cmdsts.hget('control:general', 's_plus') == 'true' else False
+
+		control['hopper_check'] = True if cmdsts.hget('control:general', 'hopper_check') == 'true' else False 
+
+		control['recipe'] = str(cmdsts.hget('control:general', 'recipe'))
+
+		control['status'] = str(cmdsts.hget('control:general', 'status'))
+
+		control['probe_profile_update'] = True if cmdsts.hget('control:general', 'probe_profile_update') == 'true' else False
+
+		control['safety'] = {
+			'startuptemp' : int(cmdsts.hget('control:safety', 'startuptemp')),
+			'afterstarttemp' : int(cmdsts.hget('control:safety', 'afterstarttemp')),
+			'reigniteretries' : int(cmdsts.hget('control:safety', 'reigniteretries')),
+			'reignitelaststate' : str(cmdsts.hget('control:safety', 'reignitelaststate')) 
+		}
+
+		control['setpoints'] = {
+			'grill' : int(cmdsts.hget('control:setpoints', 'grill')),
+			'probe1' : int(cmdsts.hget('control:setpoints', 'probe1')),
+			'probe2' : int(cmdsts.hget('control:setpoints', 'probe2'))
+		}
+
+		control['notify_req'] = {
+			'grill' : True if cmdsts.hget('control:notify_req', 'grill') == 'true' else False,
+			'probe1' : True if cmdsts.hget('control:notify_req', 'probe1') == 'true' else False,
+			'probe2' : True if cmdsts.hget('control:notify_req', 'probe2') == 'true' else False,
+			'timer' : True if cmdsts.hget('control:notify_req', 'timer') == 'true' else False
+		}
+
+		control['notify_data'] = {
+			'hopper_low' : True if cmdsts.hget('control:notify_data', 'hopper_low') == 'true' else False,
+			'p1_shutdown' : True if cmdsts.hget('control:notify_data', 'p1_shutdown') == 'true' else False,
+			'p2_shutdown' : True if cmdsts.hget('control:notify_data', 'p2_shutdown') == 'true' else False,
+			'timer_shutdown' : True if cmdsts.hget('control:notify_data', 'timer_shutdown') == 'true' else False
+		}
+
+		control['timer'] = {
+			'start' : int(cmdsts.hget('control:timer', 'start')), 
+			'paused' : int(cmdsts.hget('control:timer', 'paused')), 
+			'end' : int(cmdsts.hget('control:timer', 'end')), 
+			'shutdown' : True if cmdsts.hget('control:timer', 'shutdown') == 'true' else False 
+		}
+
+		control['manual'] = {
+			'change' : True if cmdsts.hget('control:manual', 'change') == 'true' else False, 
+			'output' : str(cmdsts.hget('control:manual', 'output')),
+			'state' : str(cmdsts.hget('control:manual', 'state')),
+			'current' : {
+				'fan' : int(cmdsts.hget('control:manual', 'fan')),
+				'auger' : int(cmdsts.hget('control:manual', 'auger')),
+				'igniter' : int(cmdsts.hget('control:manual', 'igniter')),
+				'power' : int(cmdsts.hget('control:manual', 'power'))
+			}
+		}
 
 	return(control)
 
 def WriteControl(control):
-	# *****************************************
-	# Write all control states to JSON file
-	# *****************************************
-	json_data_string = json.dumps(control)
-	with open("/tmp/control.json", 'w') as control_file:
-		control_file.write(json_data_string)
+	global cmdsts
+
+	cmdsts.hset('control:general', 'updated', str(control['updated']).lower())  # Bool 
+
+	cmdsts.hset('control:general', 'mode', str(control['mode']))  # Str 
+
+	cmdsts.hset('control:general', 's_plus', str(control['s_plus']).lower())  # Bool 
+
+	cmdsts.hset('control:general', 'hopper_check', str(control['hopper_check']).lower())  # Bool 
+
+	cmdsts.hset('control:general', 'recipe', str(control['recipe']))  # Str 
+
+	cmdsts.hset('control:general', 'status', str(control['status']))  # Str 
+
+	cmdsts.hset('control:general', 'probe_profile_update', str(control['probe_profile_update']).lower())  # Bool 
+
+	for item, value in control['safety'].items():
+		cmdsts.hset('control:safety', item, value)
+
+	for item, value in control['setpoints'].items():
+		cmdsts.hset('control:setpoints', item, value)
+	
+	for item, value in control['notify_req'].items():
+		cmdsts.hset('control:notify_req', item, str(value).lower())
+
+	for item, value in control['notify_data'].items():
+		cmdsts.hset('control:notify_data', item, str(value).lower())
+
+	for item, value in control['timer'].items():
+		if type(value) == bool:
+			cmdsts.hset('control:timer', item, str(value).lower())
+		else:
+			cmdsts.hset('control:timer', item, value)
+
+	for item, value in control['manual']['current'].items():
+		cmdsts.hset('control:manual', item, value)
+
+	cmdsts.hset('control:manual', 'change', str(control['manual']['change']).lower())
+	cmdsts.hset('control:manual', 'output', control['manual']['output'])
+	cmdsts.hset('control:manual', 'state', control['manual']['state'])
+
 
 def ReadSettings():
 	# *****************************************
@@ -512,7 +604,7 @@ def WriteLog(event):
 	logfile.write(now + ' ' + event + '\n')
 	logfile.close()
 
-def ReadHistory(num_items=0):
+def ReadHistory(num_items=0, flushhistory=False):
 	# *****************************************
 	# Function: ReadHistory
 	# Input: num_items (items from end of the history)
@@ -520,72 +612,35 @@ def ReadHistory(num_items=0):
 	# Description: Read history.log and populate
 	#  a list of data
 	# *****************************************
+	global cmdsts
+	
+	data_list = []  # Initialize data list
 
-	# Read all lines of history.log into a list(array)
-	try:
-		if(num_items == 0):
-			with open('/tmp/history.log') as history_file:
-				history_lines = history_file.readlines()
-				history_file.close()
+	# If a flushhistory is requested, then flush the control:history key (and data)
+	if flushhistory:
+		if cmdsts.exists('control:history'):
+			cmdsts.delete('control:history')  # deletes the history
+			# These lines set the current temps to zero
+			cmdsts.hset('control:current', 'GrillTemp', 0)
+			cmdsts.hset('control:current', 'Probe1Temp', 0)
+			cmdsts.hset('control:current', 'Probe2Temp', 0)
+			event = 'WARNING: History data flushed.'
+			WriteLog(event)
+	else:
+		if cmdsts.exists('control:history'):
+			if(num_items > 0) and (len(data_list) < num_items):
+				# Get range
+				liststart = cmdsts.llen('control:history') - num_items
+			else: 
+				liststart = 0
+			data = cmdsts.lrange('control:history', liststart, -1)
+			for index in range(len(data)):
+				data_list.append(data[index].split(' ', 6))  # Splits out each of the values into seperate list items 
 		else:
-			command = 'tail -n ' + str(num_items) + ' /tmp/history.log'
-			history_file = os.popen(command)
-			history_lines = history_file.readlines()
-			history_file.close()
-
-	# If file not found error, then create history.log file
-	except(IOError, OSError):
-		data_list = []
-		WriteLog('WARNING: Issue reading /tmp/history.log')
-		return(data_list)
-
-	# Initialize data list
-	data_list = []
-
-	for index in range(len(history_lines)):
-		data_line = history_lines[index].rsplit(' ', 1)[0] # Strips off the '\n' from the line
-		data_list.append(data_line.split(' ',6)) # Splits out each of the values into seperate list items
+			event = 'WARNING: History data is not present in database.'
+			WriteLog(event)
 
 	return(data_list)
-
-def ReadCurrent():
-	# *****************************************
-	# Function: ReadCurrent
-	# Input: none
-	# Output: cur_probe_temps []
-	# Description: Read current.log and populate
-	#  a list of data
-	# *****************************************
-
-	try:
-		with open('/tmp/current.log') as current_file:
-			current_line = current_file.readline()
-			current_file.close()
-	# If file not found error, then return 0'd data
-	except(IOError, OSError):
-		cur_probe_temps = [0,0,0]
-		WriteLog('WARNING: Issue reading /tmp/current.log')
-		
-		timenow = datetime.datetime.now()
-		timestr = timenow.strftime('%H:%M:%S') # Truncate the microseconds
-		curfile = open("/tmp/current.log", "w") # Write current data to current.log file
-		curfile.write(timestr + ' 0 0 0 0 0 0' )
-		curfile.close()
-
-		return(cur_probe_temps)
-
-	# Initialize data list
-	data_list = []
-
-	data_list = current_line.split(' ',6) # Splits out each of the values into seperate list items
-
-	cur_probe_temps = [0, 0, 0]
-
-	cur_probe_temps[0] = int(data_list[1])
-	cur_probe_temps[1] = int(data_list[3])
-	cur_probe_temps[2] = int(data_list[5])
-
-	return(cur_probe_temps)
 
 def WriteHistory(TempStruct, maxsizelines=28800):
 	# *****************************************
@@ -594,34 +649,51 @@ def WriteHistory(TempStruct, maxsizelines=28800):
 	# Description: Write event to history.log AND current.log
 	#  Event should be a string.
 	# *****************************************
+	global cmdsts 
 
 	timenow = datetime.datetime.now()
 	timestr = timenow.strftime('%H:%M:%S') # Truncate the microseconds
-	event = str(int(TempStruct['GrillTemp'])) + ' ' + str(TempStruct['GrillSetPoint']) + ' ' + str(int(TempStruct['Probe1Temp'])) + ' ' + str(TempStruct['Probe1SetPoint']) + ' ' + str(int(TempStruct['Probe2Temp'])) + ' ' + str(TempStruct['Probe2SetPoint'])
+	datastring = timestr + ' ' + str(int(TempStruct['GrillTemp'])) + ' ' + str(TempStruct['GrillSetPoint']) + ' ' + str(int(TempStruct['Probe1Temp'])) + ' ' + str(TempStruct['Probe1SetPoint']) + ' ' + str(int(TempStruct['Probe2Temp'])) + ' ' + str(TempStruct['Probe2SetPoint'])
+	# Push data string to the list in the last position
+	cmdsts.rpush('control:history', datastring)
 
-	logfile = open("/tmp/history.log", "a")	# Append current data to history.log file
-	logfile.write(timestr + ' ' + event + ' \n')
-	logfile.close()
+	# Check if the list has exceeded maxsizelines, and pop the first item from the list if it has
+	if cmdsts.llen('control:history') > maxsizelines:
+		cmdsts.lpop('control:history')
 
-	curfile = open("/tmp/current.log", "w") # Write current data to current.log file
-	curfile.write(timestr + ' ' + event)
-	curfile.close()
+	# Set current values in the control:current hash
+	cmdsts.hset('control:current', 'GrillTemp', int(TempStruct['GrillTemp']))
+	cmdsts.hset('control:current', 'Probe1Temp', int(TempStruct['Probe1Temp']))
+	cmdsts.hset('control:current', 'Probe2Temp', int(TempStruct['Probe2Temp']))
 
+	# Store tr values for probe tuning (TODO: Create a switch so this isn't constantly running)
 	tr_values = str(int(TempStruct['GrillTr'])) + ' ' + str(int(TempStruct['Probe1Tr'])) + ' ' + str(int(TempStruct['Probe2Tr']))
 	trfile = open("/tmp/tr.log", "w") # Write current data to current.log file
 	trfile.write(tr_values)
 	trfile.close()
 
-	command = 'wc -l /tmp/history.log' # Use the Word Count CLI tool to get number of lines
-	history_file = os.popen(command)
-	history_lines = history_file.readlines()
-	history_file.close()
-	temp_array = history_lines[0].split(' ') # Split result line into parts
+def ReadCurrent(zero_out=False):
+	# *****************************************
+	# Function: ReadCurrent
+	# Input: none
+	# Output: cur_probe_temps []
+	# Description: Read current.log and populate
+	#  a list of data
+	# *****************************************
+	global cmdsts
+	
+	cur_probe_temps = [0, 0, 0]
 
-	if(int(temp_array[0]) >= maxsizelines):
-		WriteLog('File: history.log at maximum set size, removing an hour of data from beginning.')
-		os.system('tail -n ' + str(maxsizelines - 1200) + ' /tmp/history.log > /tmp/history.bak')
-		os.system('rm /tmp/history.log && mv /tmp/history.bak /tmp/history.log')
+	if (not cmdsts.exists('control:current')) or (zero_out):
+		cmdsts.hset('control:current', 'GrillTemp', 0)
+		cmdsts.hset('control:current', 'Probe1Temp', 0)
+		cmdsts.hset('control:current', 'Probe2Temp', 0)
+	else:
+		cur_probe_temps[0] = cmdsts.hget('control:current', 'GrillTemp')
+		cur_probe_temps[1] = cmdsts.hget('control:current', 'Probe1Temp')
+		cur_probe_temps[2] = cmdsts.hget('control:current', 'Probe2Temp')
+	
+	return(cur_probe_temps)
 
 def ReadTr():
 	# *****************************************

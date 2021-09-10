@@ -71,9 +71,10 @@ echo "**                                                                     **"
 echo "**      Installing Dependancies... (This could take several minutes)   **"
 echo "**                                                                     **"
 echo "*************************************************************************"
-$SUDO apt install python3-dev python3-pip python3-rpi.gpio python3-pil libfreetype6-dev libjpeg-dev build-essential libopenjp2-7 libtiff5 nginx git gunicorn3 supervisor ttf-mscorefonts-installer -y
+$SUDO apt install python3-dev python3-pip python3-rpi.gpio python3-pil libfreetype6-dev libjpeg-dev build-essential libopenjp2-7 libtiff5 nginx git gunicorn3 supervisor ttf-mscorefonts-installer redis-server -y
 $SUDO pip3 install flask
 $SUDO pip3 install pushbullet.py
+$SUDO pip3 install redis
 
 # Grab project files
 clear
