@@ -332,6 +332,9 @@ def ReadControl(flush=False):
 		cmdsts.delete('control:notify_data')
 		cmdsts.delete('control:timer')
 		cmdsts.delete('control:manual')
+		# The following set's no persistence so that we don't get writes to the disk / SDCard 
+		cmdsts.config_set('appendonly', 'no')
+		cmdsts.config_set('save', '')
 
 		control = DefaultControl()
 		WriteControl(control)
