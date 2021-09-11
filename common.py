@@ -326,12 +326,7 @@ def ReadControl(flush=False):
 	if flush:
 		# Remove all control structures in Redis DB (not history or current)
 		cmdsts.delete('control:general')
-		cmdsts.delete('control:safety')
-		cmdsts.delete('control:setpoints')
-		cmdsts.delete('control:notify_req')
-		cmdsts.delete('control:notify_data')
-		cmdsts.delete('control:timer')
-		cmdsts.delete('control:manual')
+
 		# The following set's no persistence so that we don't get writes to the disk / SDCard 
 		cmdsts.config_set('appendonly', 'no')
 		cmdsts.config_set('save', '')
@@ -339,111 +334,14 @@ def ReadControl(flush=False):
 		control = DefaultControl()
 		WriteControl(control)
 	else: 
-		control = {}
-
-		control['updated'] = True if cmdsts.hget('control:general', 'updated') == 'true' else False
-
-		control['mode'] = str(cmdsts.hget('control:general', 'mode'))
-
-		control['s_plus'] = True if cmdsts.hget('control:general', 's_plus') == 'true' else False
-
-		control['hopper_check'] = True if cmdsts.hget('control:general', 'hopper_check') == 'true' else False 
-
-		control['recipe'] = str(cmdsts.hget('control:general', 'recipe'))
-
-		control['status'] = str(cmdsts.hget('control:general', 'status'))
-
-		control['probe_profile_update'] = True if cmdsts.hget('control:general', 'probe_profile_update') == 'true' else False
-
-		control['safety'] = {
-			'startuptemp' : int(cmdsts.hget('control:safety', 'startuptemp')),
-			'afterstarttemp' : int(cmdsts.hget('control:safety', 'afterstarttemp')),
-			'reigniteretries' : int(cmdsts.hget('control:safety', 'reigniteretries')),
-			'reignitelaststate' : str(cmdsts.hget('control:safety', 'reignitelaststate')) 
-		}
-
-		control['setpoints'] = {
-			'grill' : int(cmdsts.hget('control:setpoints', 'grill')),
-			'probe1' : int(cmdsts.hget('control:setpoints', 'probe1')),
-			'probe2' : int(cmdsts.hget('control:setpoints', 'probe2'))
-		}
-
-		control['notify_req'] = {
-			'grill' : True if cmdsts.hget('control:notify_req', 'grill') == 'true' else False,
-			'probe1' : True if cmdsts.hget('control:notify_req', 'probe1') == 'true' else False,
-			'probe2' : True if cmdsts.hget('control:notify_req', 'probe2') == 'true' else False,
-			'timer' : True if cmdsts.hget('control:notify_req', 'timer') == 'true' else False
-		}
-
-		control['notify_data'] = {
-			'hopper_low' : True if cmdsts.hget('control:notify_data', 'hopper_low') == 'true' else False,
-			'p1_shutdown' : True if cmdsts.hget('control:notify_data', 'p1_shutdown') == 'true' else False,
-			'p2_shutdown' : True if cmdsts.hget('control:notify_data', 'p2_shutdown') == 'true' else False,
-			'timer_shutdown' : True if cmdsts.hget('control:notify_data', 'timer_shutdown') == 'true' else False
-		}
-
-		control['timer'] = {
-			'start' : int(cmdsts.hget('control:timer', 'start')), 
-			'paused' : int(cmdsts.hget('control:timer', 'paused')), 
-			'end' : int(cmdsts.hget('control:timer', 'end')), 
-			'shutdown' : True if cmdsts.hget('control:timer', 'shutdown') == 'true' else False 
-		}
-
-		control['manual'] = {
-			'change' : True if cmdsts.hget('control:manual', 'change') == 'true' else False, 
-			'output' : str(cmdsts.hget('control:manual', 'output')),
-			'state' : str(cmdsts.hget('control:manual', 'state')),
-			'current' : {
-				'fan' : int(cmdsts.hget('control:manual', 'fan')),
-				'auger' : int(cmdsts.hget('control:manual', 'auger')),
-				'igniter' : int(cmdsts.hget('control:manual', 'igniter')),
-				'power' : int(cmdsts.hget('control:manual', 'power'))
-			}
-		}
+		control = json.loads(cmdsts.get('control:general'))
 
 	return(control)
 
 def WriteControl(control):
 	global cmdsts
 
-	cmdsts.hset('control:general', 'updated', str(control['updated']).lower())  # Bool 
-
-	cmdsts.hset('control:general', 'mode', str(control['mode']))  # Str 
-
-	cmdsts.hset('control:general', 's_plus', str(control['s_plus']).lower())  # Bool 
-
-	cmdsts.hset('control:general', 'hopper_check', str(control['hopper_check']).lower())  # Bool 
-
-	cmdsts.hset('control:general', 'recipe', str(control['recipe']))  # Str 
-
-	cmdsts.hset('control:general', 'status', str(control['status']))  # Str 
-
-	cmdsts.hset('control:general', 'probe_profile_update', str(control['probe_profile_update']).lower())  # Bool 
-
-	for item, value in control['safety'].items():
-		cmdsts.hset('control:safety', item, value)
-
-	for item, value in control['setpoints'].items():
-		cmdsts.hset('control:setpoints', item, value)
-	
-	for item, value in control['notify_req'].items():
-		cmdsts.hset('control:notify_req', item, str(value).lower())
-
-	for item, value in control['notify_data'].items():
-		cmdsts.hset('control:notify_data', item, str(value).lower())
-
-	for item, value in control['timer'].items():
-		if type(value) == bool:
-			cmdsts.hset('control:timer', item, str(value).lower())
-		else:
-			cmdsts.hset('control:timer', item, value)
-
-	for item, value in control['manual']['current'].items():
-		cmdsts.hset('control:manual', item, value)
-
-	cmdsts.hset('control:manual', 'change', str(control['manual']['change']).lower())
-	cmdsts.hset('control:manual', 'output', control['manual']['output'])
-	cmdsts.hset('control:manual', 'state', control['manual']['state'])
+	cmdsts.set('control:general', json.dumps(control))
 
 
 def ReadSettings():
