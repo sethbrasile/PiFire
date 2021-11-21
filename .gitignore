@@ -42,3 +42,7 @@ templates/backups/index.html.original
 templates/backups/test.html
 
 test.json
+
+docs/restricted/
+
+templates/backups/
