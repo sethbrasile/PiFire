@@ -108,7 +108,11 @@ OR you may find that it is more reliable to download the script to your raspberr
 
 ```bash
 $ wget https://raw.githubusercontent.com/nebhead/pifire/main/auto-install/install.sh
-$ sudo bash install.sh
+$ bash install.sh
+```
+
+```note
+Run the script without using SUDO, as the script will automatically obtain the privledges it needs to install.
 ```
 
 Follow the onscreen prompts to complete the installation.  
