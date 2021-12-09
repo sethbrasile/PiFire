@@ -64,7 +64,7 @@ There is a PCB design which greatly reduces the wiring effort required for wirin
 
 * The schematic, PCB and gerber files are available here: [https://easyeda.com/nebhead77/pifire-v2](https://easyeda.com/nebhead77/pifire-v2)
 
-You can order your own directly from one of the many PCB manufacturers (very cheaply) or directly through JLCPCB.  
+You can order your own directly from one of the many PCB manufacturers (very cheaply) or directly through JLCPCB.  Unfortunately ordering from EasyEDA and JLCPCB is not very intuitive.  Instructions to order through EasyEDA and JLCPCB were discussed in the following posting [here.](https://github.com/nebhead/PiFire/discussions/58#discussioncomment-1776147)   
 
 ![Schematic](/img/PiFire-PCB-v2-Schematic.jpg)
 
