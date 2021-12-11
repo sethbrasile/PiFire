@@ -4,7 +4,7 @@ permalink: /
 sort: 1
 ---
 # ![PiFireIcon](/img/launcher-icon-1x.png) PiFire
-## Raspberry Pi Zero (2) W based Smoker Grill Controller using Python 3 and Flask/Gunicorn/nginx
+## Raspberry Pi Zero (1 or 2) W based Smoker Grill Controller using Python 3 and Flask/Gunicorn/nginx
 *Also uses Bootstrap 4 (http://getbootstrap.com/) w/jQuery and Popper support*
 
 ```danger
