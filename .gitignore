@@ -46,3 +46,7 @@ test.json
 docs/restricted/
 
 templates/backups/
+
+pelletdb.json
+
+static/js/backups/

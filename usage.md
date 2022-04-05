@@ -4,7 +4,7 @@ permalink: /usage
 sort: 4
 ---
 ## Using PiFire
-If you've configured the supervisord correctly, the application scripts should run upon a reboot.  Once the system is up and running, you should be able to access the WebUI via a browser on your smart phone, tablet or PC device.  
+If you've finished with the installation and configuration, PiFire will be ready to use.  Once the system is up and running, you should be able to access the WebUI via a browser on your smart phone, tablet or PC device.  
 
 It's recommended at least taking a peek at the PiFire overview video below.  It covers the basics of operation, settings and control.  
 
