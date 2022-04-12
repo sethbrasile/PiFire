@@ -9,7 +9,7 @@ sort: 3
 
 It's recommended to watch the video and follow along with thes steps below, to get you up and running quickly.  
 
-[![YouTube Demo](img/photos/Video-Link-Image-02.png)](https://youtu.be/4tRcG-pRTw4)
+[![YouTube Demo](img\photos\pifire-video-image-sm.jpg)](https://youtu.be/cM-xUKNYDe0)
 
 ### Raspberry Pi Zero W - Flash and Prepare SD Card
 
@@ -50,7 +50,7 @@ network={
 }
 ```
 
-### Power-On, Log In Via SSH and Run RasPi-Config
+##### Power-On, Log In Via SSH and Run RasPi-Config
 
 Now you can power-up your Raspberry Pi with your microSD card inserted, and connect to it via SSH.  If you're on a Linux PC, use the command line connect to your Pi.
 
@@ -114,10 +114,6 @@ It's also a great idea to run update/upgrade on intial setup.  The auto-install 
 
 An automatic installation script has been provided to setup PiFire on freshly flashed Raspberry Pi.  If anything fails, you may just want to try re-running the installation again.  
 
-```warning
-This script requires that you install on the 'pi' user account, otherwise the supervisor portion of the install will likely fail.
-```
-
 After you've done the above steps to configure your Raspberry Pi, at the command line type the following (without the `$`):
 
 ```bash
@@ -138,7 +134,7 @@ IMPORTANT: Run the script without using SUDO, as the script will automatically o
 Follow the onscreen prompts to complete the installation.  
 
 ```note
-At the end of the script, the system will reboot, so just be aware of this.
+At the end of the script, the system will reboot.  Once the system has rebooted, you can then use your browser to complete the configuration.  
 ```
 
 ### PiFire Configuration Wizard

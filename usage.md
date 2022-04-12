@@ -10,7 +10,7 @@ It's recommended at least taking a peek at the PiFire overview video below.  It 
 
 [![YouTube Demo](img/photos/Video-Link-Image-sm.png)](https://youtu.be/_sIkpIFP5qA)
 
-Simply navigate to the IP address of your device for example (you can usually find the IP address of your device from looking at your router's configuration/status pages). My router typically assigns IPs with prefixes of 192.168.10.XXX.  I'll use examples on my home network here, so you'll see URLs like: http://192.168.10.42  Yours may look different depending on your routers firmware/manufacturer (i.e. 10.10.0.XXX, etc.)
+If you setup a hostname (ex. pifire.local) when flashing your SD Card, it's likely you can simply access the WebUI by typing [http://pifire.local](http://pifire.local) into your browser.  If that doesn't work for you, simply navigate to the IP address of your device for example (you can usually find the IP address of your device from looking at your router's configuration/status pages). My router typically assigns IPs with prefixes of 192.168.YYY.XXX.  I'll use examples on my home network here, so you'll see URLs like: http://192.168.10.42  Yours may look different depending on your routers firmware/manufacturer (i.e. 10.10.0.XXX, etc.)
 ```note
 **Note:** It's highly recommended to set a static IP for your Pi in your router's configuration.  This will vary from manufacturer to manufacturer and is not covered in this guide.  A static IP ensures that you will be able to access your device reliably, without having to check your router for a new IP every so often.   
 ```

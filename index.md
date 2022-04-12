@@ -4,8 +4,7 @@ permalink: /
 sort: 1
 ---
 # ![PiFireIcon](/img/launcher-icon-1x.png) PiFire
-## Raspberry Pi Zero (1 or 2) W based Smoker Grill Controller using Python 3 and Flask/Gunicorn/nginx
-*Also uses Bootstrap 4 (http://getbootstrap.com/) w/jQuery and Popper support*
+## Raspberry Pi Zero (1 or 2) W Based Smoker Grill Controller 
 
 ```danger
 The creator of this project takes no responsibility for any damage that you may do to your personal property including modifications to your smoker grill if you choose to use this project.  The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.*  ***This project is provided for educational purposes, and should be attempted only by individuals who wish to assume all risks involved.***
@@ -98,10 +97,6 @@ I recommend at least taking a peek at the PiFire overview video below.  It cover
 
 [![YouTube Demo](img/photos/Video-Link-Image-sm.png)](https://youtu.be/_sIkpIFP5qA)
 
-Here's a picture of my version 1.0 hardware w/OLED screen in a waterproof project box.    
-
-![Hardware v1](img/photos/HW-V1-Display.jpg)
-
 Here is a the latest version 2.0 of the hardware w/TFT screen and hardware buttons in a custom 3D printed enclosure. We've come a long way since v1.0.
 
 ![Hardware v2](img/photos/HW-V2-Display.jpg)
@@ -139,7 +134,7 @@ This project is licensed under the MIT license.
 ```
 MIT License
 
-Copyright (c) 2020, 2021 Ben Parmeter and Contributors
+Copyright (c) 2020 - 2022 Ben Parmeter and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
