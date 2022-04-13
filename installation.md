@@ -85,28 +85,6 @@ Once raspi-config is open, the following should be configured at a minimum.
 5. Finish and reboot
 
 ```tip
-**i2c Fast Baudrate** (https://luma-oled.readthedocs.io/en/latest/hardware.html#pre-requisites) Optionally, to improve performance, increase the I2C baudrate from the default of 100KHz to 400KHz by altering `/boot/config.txt` to include:
-
-`dtparam=i2c_arm=on,i2c_baudrate=400000`
-
-**Notes for the Raspberry Pi 3B, 3B+ and Zero W** (https://www.abelectronics.co.uk/kb/article/1089/i2c--smbus-and-raspbian-stretch-linux)
-
-The I2C controller on the Raspberry Pi 3B, 3B+ and Zero W has its clock linked to the VPU core so as the VPU frequency changes depending on processor load so does the clock rate of the I2C bus.  This can cause problems with any devices that expect a constant clock rate during communication.
-
-To solve this issue the VPU core frequency must be set to a fixed frequency by editing /boot/config.txt.  Open the file with nano using the command:
-`sudo nano /boot/config.txt`
-Add the following text to the bottom of the file.
-
-`core_freq=250`
-
-Save your changes, exit the nano editor and reboot:
-
-`sudo reboot`
-
-In some cases you might experience unexpected results with some I2C devices when increasing the frequency of the interface.  If your hardware seems to be having problems with the above, consider keeping the original baudrate for this bus. 
-```
-
-```tip
 It's also a great idea to run update/upgrade on intial setup.  The auto-install script does this for you as well, but will go faster if this has already been done.
 ```
 
