@@ -8,7 +8,7 @@ If you've finished with the installation and configuration, PiFire will be ready
 
 It's recommended at least taking a peek at the PiFire overview video below.  It covers the basics of operation, settings and control.  
 
-[![YouTube Demo](img/photos/Video-Link-Image-sm.png)](https://youtu.be/_sIkpIFP5qA)
+[![YouTube Demo](img/photos/Video-Link-Image-sm.png)](https://youtu.be/zifl0_sfFBA)
 
 If you setup a hostname (ex. pifire.local) when flashing your SD Card, it's likely you can simply access the WebUI by typing [http://pifire.local](http://pifire.local) into your browser.  If that doesn't work for you, simply navigate to the IP address of your device for example (you can usually find the IP address of your device from looking at your router's configuration/status pages). My router typically assigns IPs with prefixes of 192.168.YYY.XXX.  I'll use examples on my home network here, so you'll see URLs like: http://192.168.10.42  Yours may look different depending on your routers firmware/manufacturer (i.e. 10.10.0.XXX, etc.)
 ```note
