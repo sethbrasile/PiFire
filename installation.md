@@ -9,7 +9,7 @@ sort: 3
 
 It's recommended to watch the video and follow along with thes steps below, to get you up and running quickly.  
 
-[![YouTube Demo](img\photos\pifire-video-image-sm.jpg)](https://youtu.be/cM-xUKNYDe0)
+[![YouTube Demo](img\photos\pifire-video-image-sm.jpg)](https://youtu.be/Bena9Yq00VM)
 
 ### Raspberry Pi Zero W - Flash and Prepare SD Card
 
