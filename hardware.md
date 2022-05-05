@@ -189,6 +189,10 @@ STLs for this design can be found on Thingiverse here:
 
 * Distance Sensor OnShape: [https://cad.onshape.com/documents/b95282d5ebd233bf22c48187/w/867e1e2e2f53551dd2575f1a/e/eaa8a945102367392b414161?renderMode=0&uiState=619467293958f85a7b286a18](https://cad.onshape.com/documents/b95282d5ebd233bf22c48187/w/867e1e2e2f53551dd2575f1a/e/eaa8a945102367392b414161?renderMode=0&uiState=619467293958f85a7b286a18)
 
+[@M7Fa](https://github.com/M7Fa) has created a design for the PitBoss Austin XL and shared on Thingiverse.
+
+* Display Panel Thingiverse: [https://www.thingiverse.com/thing:5377280](https://www.thingiverse.com/thing:5377280)
+
 #### Older Implementation
 
 ```note
