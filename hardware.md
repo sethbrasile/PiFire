@@ -91,6 +91,16 @@ Github user [@weberbox](https://github.com/weberbox) has extended the above desi
 
 * EasyEda Button PCB: [https://easyeda.com/zipster85/pifire-buttons](https://easyeda.com/zipster85/pifire-buttons)
 
+__Update(2022-10-5):__
+
+Github user [@weberbox](https://github.com/weberbox) has outdone himself again and created a very compact PCB for PiFire, with an integrated power-supply, Solid State Relays and 12V DC Fan with PWM support.  This board isn't for everyone, but I personally think it's outstanding.  Keep in mind that the Pi Header is reversed from 'typical' configurations, so you may need to solder your header to the backside of the Pi, or convert with a cable/connector.  
+
+* OSHWLab PCB w/DC Fan PWM Version: [https://oshwlab.com/zipster85/pifire-controller-pwm-1.2](https://oshwlab.com/zipster85/pifire-controller-pwm-1.2)
+
+* Handy BOM List for the above PCB: [https://github.com/nebhead/PiFire/files/9720705/PiFire-PWM-1.2-2022-BOM.xlsx](https://github.com/nebhead/PiFire/files/9720705/PiFire-PWM-1.2-2022-BOM.xlsx)
+
+![PCB w/DC Fan PWM Version](/img/photos/weberbox_compact_pcb.jpg)
+
 #### AC Components & Relay Schematic
 
 The following is a rough schematic of the relay side of the of the design. Basically this is what allows you to control the Fan, Auger, Igniter and Power as well as switch between the existing controller and the PiFire controller via software.

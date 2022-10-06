@@ -50,3 +50,5 @@ templates/backups/
 pelletdb.json
 
 static/js/backups/
+
+history/
