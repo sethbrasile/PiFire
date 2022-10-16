@@ -44,26 +44,29 @@ What I did keep from dborello's project was the PID controller which was the hea
 	* _Shutdown Mode_ (auger off, fan on) to burn off pellets after cook is completed
 	* _Monitor Mode_ - See temperatures of grill / probes and get notifications if using another controller or if just checking the temperatures any time.  
 	* _Manual Mode_ - Control fan, auger and igniter manually.  
+	*  __NEW:__ _Prime_ - Allows you to prime the firepot with pellets prior to a cook.  
 * Supports several different OLED and LCD screens
 	* SSD1306 OLED Display
 	* ST7789 TFT Display
-	* ILI9341 TFT Display
+	* ILI9341 TFT Display (now with more rotation options)
 * Physical Button Input / Control (depending on the display, three button inputs)
+* Encoder support for, so you can control your grill with a spinny knob.
 * One (1) Grill Probe and Two (2) Food Probes
 	* Tunable probe inputs to allow for many different probe manufacturers
 	* Probe tuning tool to help develop probe profiles
+	* NEW - Up to two (2) grill probes if using the correct PCB design.
 * Cook Timer
 * Notifications (Grill / Food Probes / Timer)
-	* Supports IFTTT, Pushover, and Pushbullet Notification Services 
+	* Supports Apprise, IFTTT, Pushover, and Pushbullet Notification Services
 * Smoke Plus Feature to deliver more smoke during Smoke / Hold modes
 * Safety settings to prevent over-temp, startup failure, or firepot flameout (and overload)
-* Temperature History for all probes / set points
-* Wood Pellet Tracking Manager
+* __NEW__ Save temperature history for all probes / set points to a cook file that can be updated with images, notes, and even downloaded to your devices.
+* Wood Pellet Tracking Manager - Now includes estimates of pellet usage.
 * Pellet Level Sensor Support
 	* VL53L0X Time of Flight Sensor
 	* HCSR04 Ultrasonic Sensor
 * Socket IO for Android Application Support _(GitHub User [@weberbox](https://github.com/weberbox) has made a Android client app under development here: [https://github.com/weberbox/PiFire-Android](https://github.com/weberbox/PiFire-Android))_
-* ...And much more! 
+* ...And much more!  
 
 ### Screenshots & Videos
 
@@ -95,7 +98,9 @@ Here's a brief YouTube video giving a basic overview of the PiFire web interface
 
 I recommend at least taking a peek at the PiFire overview video below.  It covers the basics of operation, settings and control.  
 
-[![YouTube Demo](img/photos/Video-Link-Image-sm.png)](https://youtu.be/zifl0_sfFBA)
+[![YouTube Demo](docs/photos/Video-Link-Image-sm.png)](https://youtu.be/zifl0_sfFBA)
+
+[Link to our channel on YouTube](https://www.youtube.com/channel/UCYYs50U5QvHHhogx_rqs0Yg)
 
 Here is a the latest version 2.0 of the hardware w/TFT screen and hardware buttons in a custom 3D printed enclosure. We've come a long way since v1.0.
 
@@ -103,9 +108,12 @@ Here is a the latest version 2.0 of the hardware w/TFT screen and hardware butto
 
 And if you're interested in seeing more builds from other users, we have a discussions thread [here](https://github.com/nebhead/PiFire/discussions/28) where others have posted pictures of their unique builds.  
 
+### Discord
+I've added a discord server [here](https://discord.gg/F9mbCrbrZS) which can be a great resource for all who want to get more information, want to share their own builds, or just chat about pellet cooking.  Looking forward to seeing you there. 
+
 ### Credits
 
-Web Application created by Ben Parmeter, copyright 2020, 2021. Check out my other projects on [github](https://github.com/nebhead). If you enjoy this software and feel the need to donate a cup of coffee, a frosty beer or a bottle of wine to the developer you can click [here](https://paypal.me/benparmeter).
+Web Application created by Ben Parmeter, copyright 2020, 2021, 2022. Check out my other projects on [github](https://github.com/nebhead). If you enjoy this software and feel the need to donate a cup of coffee, a frosty beer or a bottle of wine to the developer you can click [here](https://paypal.me/benparmeter).
 
 Of course, none of this project would be available without the wonderful and amazing folks below.  If I forgot anyone please don't hesitate to let me know.  
 
