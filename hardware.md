@@ -56,6 +56,10 @@ Let me first say that I am not a hardware engineer by trade and thus there may b
 Example of basic PiFire wiring (PiSide) with SSD1306 OLED I2C based display.  
 ![Raspberry Pi Wiring w/I2C Display](/img/PiFire-PiSide-Schematic.png)
 
+```note
+There have been questions around the optional switch attached to GPIO17.  This is only used in configurations where you are using both the original controller and the PiFire controller on the same grill.  If you selected standalone during the wizard configuration, then this switch is ignored.  If you selected OEM Controller Present in the wizard configuration, then this switch will control whether PiFire is actively controlling the grill, or the OEM controller is controlling the grill.  This could potentially used to switch between the controllers on the fly, but is generally not recommended.  
+```
+
 Example of advanced PiFire wiring (PiSide) with ILI9341 TFT SPI based display and VL53L0X hopper sensor.  
 ![Raspberry Pi Wiring w/SPI Display & Hopper Sensore](/img/PiFire-PiSide-SchematicB.jpg)
 
