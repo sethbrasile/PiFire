@@ -23,3 +23,49 @@ Each of the above modules has a prototype version *(i.e. grillplat_prototype.py)
 When prototyping, functionality, it's helpful to run control.py in one process and the app.py in another process.  This way you can access the PiFire webui via your web browser of choice and monitor the console output of the control.py script in a separate window.  
 
 More to come in this section.
+
+#### API
+
+PiFire offers a basic API to adjust settings or to control the system over the wire.  This API is used by the dashboard javascript to control the grill, which can be used as a reference for others build apps, dashboards or even other hardware that interfaces with the system.  
+
+- GET Settings (/api/settings): Dumps all of the current settings from settings.json in JSON format
+- GET Control (/api/control): Dumps all of the current control from control.json in JSON format
+- GET Current (/api/current): Dumps JSON of some key current activity, for ex:
+
+```json 
+{
+  "current": {
+    "grill_temp": "0", 
+    "probe1_temp": "0", 
+    "probe2_temp": "0"
+  }, 
+  "setpoints": {
+    "grill": 0, 
+    "probe1": 0, 
+    "probe2": 0
+  }, 
+  "status": {
+    "mode": "Stop", 
+    "name": "Smokey Bear", 
+    "pelletlevel": 80, 
+    "pellets": "Generic Alder", 
+    "s_plus": true, 
+    "status": "", 
+    "units": "F"
+  }
+}
+```
+
+- POST Settings (/api/settings): Change any settings data from settings.json.  Post format identical to the format of the settings.json file.  For ex: 
+
+```json
+{ "globals" : { "grill_name" : "Smokey the Bear" } }
+```
+
+- POST Control (/api/control): Change any control data from control.json.  Post format identical to the format of the settings.json file.  For ex: 
+
+```json
+{ "updated" : true, "mode" : "Startup", "setpoints" : { "grill" : 500 } } 
+```
+
+This code will change the mode to 'Startup' and by setting the 'updated' key to 'true', will tell the control script to check for the mode change. The grill setpoint of 500 above, probably wouldn't do anything in this example, but if you were switching to 'Hold' mode, the control script would use 500F as your setpoint for that mode.  
