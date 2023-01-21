@@ -3,13 +3,20 @@ title: "Cookfile Format"
 permalink: /cookfile
 sort: 8
 ---
-### Cookfile Format v1.0.1
+### Cookfile Format v1.5.0
 
 Introduced with v1.3.5 of PiFire, the cookfile format saves information about a cook from start to finish.  The file includes metadata, history data, labels, events, comments, and assets (images).  This page will provide the technical details, such that others can utilize the same formatting in their software.  I'm providing this specification and making it freely available so that anyone can adopt it for their project or production product.  
 
 ```danger
 This specification, and contents are currently under development and may be updated periodically to improve accuracy and information.  
 ```
+
+#### New with v1.5.0
+
+The following changes were made to the file format in v1.5.0:
+1. **graph_data.json** - The format for this file has been completely changed and now contains data structures that can be directly used by the chartjs to render the chart. 
+2. **graph_labels.json** - The format for this file has been changed to accomodate updates to the latest PiFire, giving much more flexibility to the number and types of probes available.  
+3. **raw_data.json** - This file has been added to the structure which is a raw dump of the data that PiFire stores in it's own database while running.  This file may contain extended data and 'Aux' probes that aren't displayed in the UI.  This is the data used when selecting a CSV export from the graph card in the cookfile UI of PiFire.  
 
 #### Compression
 
@@ -24,6 +31,7 @@ In broad strokes, the cookfile is a compressed zip formatted folder of files.  T
 + events.json
 + graph-data.json
 + graph-labels.json
++ raw-data.json 
 + comments.json
 + assets.json
 
@@ -180,80 +188,451 @@ Each of these modes would have a block with metrics like the above.  The metrics
 * **startup_temp:** Integer or Float that indicates the ambient startup temperature (used to select smart-start)
 * **timeinmode:** String calculated time in mode using endtime - starttime. 
 
-#### Graph Data and Labels
+#### Graph Labels
 
-These files contain information to help reconstruct a graph of the cook, using data from each of the probes.  The graph_labels file provides a mapping of labels to the probe data. 
+```note
+This file is not currently being utilized in the latest version of PiFire and may be depricated or merged into the graph_data.json file.  
+```
+
+The graph_labels file provides a mapping of probe names to the probe labels for the data.  The below is an example of how this is formatted:
 
 ```json
 {
-  "grill1_label": "Grill",
-  "probe1_label": "Probe 1",
-  "probe2_label": "Probe 2"
+  "primarysp": {
+    "Grill": "Grill Set Point"
+  },
+  "probes": {
+    "Grill": "Grill",
+    "Probe1": "Probe-1",
+    "Probe2": "Probe-2"
+  },
+  "targets": {
+    "Grill": "Grill Target",
+    "Probe1": "Probe-1 Target",
+    "Probe2": "Probe-2 Target"
+  }
 }
 ```
 
-Currently PiFire will recognize 'grill1_label', 'grill2_label', 'probe1_label' and 'probe2_label' in this file.  Users can then map a string to to these particular datasets.  For example, Probe 1 may be for a prime-rib roast, so the user may choose to change this to "Prime Rib".  
+The required fields are as follows:
 
-* **grill1_label:** String to map to this probe label.  
-* **probe1_label:** String to map to this probe label.
-* **probe2_label:** String to map to this probe label.
+* **primarysp:** Label/Friendly Name for the primary set point data set. 
+* **probes:** Label/Friendly Name for all graphed probes including the primary probe.   
+* **targets:** Label/Friendly Name for all graphed probes targets including the primary probe.   
 
-The graph_data file provides the data for each of the probes. The below is an abbreviated version of the file.  You will notice that there are a series of ordered lists with data for each of the probes and the timestamps. 
+#### Graph Data
+
+These files contain information to help reconstruct a graph of the cook, using data from each of the probes. This file format was updated in v1.5 and now contains datastructures that can be directly consumed by chartjs for easier page rendering.  
+
+The below is an abbreviated version of the file.   
 
 ```json
-{
-  "grill1_setpoint": [
-    0,
-    0,
-    ...
-    350,
-    350
+{{
+  "chart_data": [
+    {
+      "backgroundColor": "rgb(0, 64, 255, 1)",
+      "borderCapStyle": "butt",
+      "borderColor": "rgb(0, 64, 255, 1)",
+      "borderDash": [],
+      "borderDashOffset": 0.0,
+      "borderJoinStyle": "miter",
+      "data": [
+        466,
+        465,
+        459,
+        464,
+        465,
+        465,
+        466,
+        464,
+        459,
+        463,
+        457,
+        459,
+        461,
+        454,
+        465,
+        466
+      ],
+      "fill": false,
+      "hidden": false,
+      "label": "Grill",
+      "lineTension": 0.1,
+      "pointBackgroundColor": "#fff",
+      "pointBorderColor": "rgb(0, 64, 255, 1)",
+      "pointBorderWidth": 1,
+      "pointHitRadius": 10,
+      "pointHoverBackgroundColor": "rgb(0, 64, 255, 1)",
+      "pointHoverBorderColor": "rgb(0, 64, 255, 1)",
+      "pointHoverBorderWidth": 2,
+      "pointHoverRadius": 10,
+      "pointRadius": 1,
+      "pointStyle": "line",
+      "spanGaps": false
+    },
+    {
+      "backgroundColor": "rgb(0, 128, 255, 1)",
+      "borderCapStyle": "butt",
+      "borderColor": "rgb(0, 128, 255, 1)",
+      "borderDash": [
+        8,
+        4
+      ],
+      "borderDashOffset": 0.0,
+      "borderJoinStyle": "miter",
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "fill": false,
+      "hidden": false,
+      "label": "Grill Target",
+      "lineTension": 0.1,
+      "pointBackgroundColor": "#fff",
+      "pointBorderColor": "rgb(0, 128, 255, 1)",
+      "pointBorderWidth": 1,
+      "pointHitRadius": 10,
+      "pointHoverBackgroundColor": "rgb(0, 128, 255, 1)",
+      "pointHoverBorderColor": "rgb(0, 128, 255, 1)",
+      "pointHoverBorderWidth": 2,
+      "pointHoverRadius": 10,
+      "pointRadius": 1,
+      "pointStyle": "line",
+      "spanGaps": false
+    },
+    {
+      "backgroundColor": "rgb(0, 64, 255, 1)",
+      "borderCapStyle": "butt",
+      "borderColor": "rgb(0, 128, 255, 1)",
+      "borderDash": [
+        8,
+        4
+      ],
+      "borderDashOffset": 0.0,
+      "borderJoinStyle": "miter",
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        420,
+        420,
+        0,
+        420,
+        0,
+        0,
+        0,
+        420,
+        420
+      ],
+      "fill": false,
+      "hidden": false,
+      "label": "Grill Set Point",
+      "lineTension": 0.1,
+      "pointBackgroundColor": "#fff",
+      "pointBorderColor": "rgb(0, 128, 255, 1)",
+      "pointBorderWidth": 1,
+      "pointHitRadius": 10,
+      "pointHoverBackgroundColor": "rgb(0, 64, 255, 1)",
+      "pointHoverBorderColor": "rgb(0, 128, 255, 1)",
+      "pointHoverBorderWidth": 2,
+      "pointHoverRadius": 10,
+      "pointRadius": 1,
+      "pointStyle": "line",
+      "spanGaps": false
+    },
+    {
+      "backgroundColor": "rgb(0, 200, 64, 1)",
+      "borderCapStyle": "butt",
+      "borderColor": "rgb(0, 200, 64, 1)",
+      "borderDash": [],
+      "borderDashOffset": 0.0,
+      "borderJoinStyle": "miter",
+      "data": [
+        208,
+        208,
+        207,
+        208,
+        206,
+        208,
+        208,
+        207,
+        203,
+        207,
+        208,
+        207,
+        207,
+        207,
+        205,
+        207
+      ],
+      "fill": false,
+      "hidden": false,
+      "label": "Probe-1",
+      "lineTension": 0.1,
+      "pointBackgroundColor": "#fff",
+      "pointBorderColor": "rgb(0, 200, 64, 1)",
+      "pointBorderWidth": 1,
+      "pointHitRadius": 10,
+      "pointHoverBackgroundColor": "rgb(0, 200, 64, 1)",
+      "pointHoverBorderColor": "rgb(0, 200, 64, 1)",
+      "pointHoverBorderWidth": 2,
+      "pointHoverRadius": 10,
+      "pointRadius": 1,
+      "pointStyle": "line",
+      "spanGaps": false
+    },
+    {
+      "backgroundColor": "rgb(0, 232, 126, 1)",
+      "borderCapStyle": "butt",
+      "borderColor": "rgb(0, 232, 126, 1)",
+      "borderDash": [
+        8,
+        4
+      ],
+      "borderDashOffset": 0.0,
+      "borderJoinStyle": "miter",
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "fill": false,
+      "hidden": false,
+      "label": "Probe-1 Target",
+      "lineTension": 0.1,
+      "pointBackgroundColor": "#fff",
+      "pointBorderColor": "rgb(0, 232, 126, 1)",
+      "pointBorderWidth": 1,
+      "pointHitRadius": 10,
+      "pointHoverBackgroundColor": "rgb(0, 232, 126, 1)",
+      "pointHoverBorderColor": "rgb(0, 232, 126, 1)",
+      "pointHoverBorderWidth": 2,
+      "pointHoverRadius": 10,
+      "pointRadius": 1,
+      "pointStyle": "line",
+      "spanGaps": false
+    },
+    {
+      "backgroundColor": "rgb(132, 0, 0, 1)",
+      "borderCapStyle": "butt",
+      "borderColor": "rgb(132, 0, 0, 1)",
+      "borderDash": [],
+      "borderDashOffset": 0.0,
+      "borderJoinStyle": "miter",
+      "data": [
+        206,
+        207,
+        208,
+        204,
+        208,
+        208,
+        206,
+        207,
+        208,
+        205,
+        208,
+        208,
+        206,
+        206,
+        208,
+        208
+      ],
+      "fill": false,
+      "hidden": false,
+      "label": "Probe-2",
+      "lineTension": 0.1,
+      "pointBackgroundColor": "#fff",
+      "pointBorderColor": "rgb(132, 0, 0, 1)",
+      "pointBorderWidth": 1,
+      "pointHitRadius": 10,
+      "pointHoverBackgroundColor": "rgb(132, 0, 0, 1)",
+      "pointHoverBorderColor": "rgb(132, 0, 0, 1)",
+      "pointHoverBorderWidth": 2,
+      "pointHoverRadius": 10,
+      "pointRadius": 1,
+      "pointStyle": "line",
+      "spanGaps": false
+    },
+    {
+      "backgroundColor": "rgb(200, 0, 0, 1)",
+      "borderCapStyle": "butt",
+      "borderColor": "rgb(200, 0, 0, 1)",
+      "borderDash": [
+        8,
+        4
+      ],
+      "borderDashOffset": 0.0,
+      "borderJoinStyle": "miter",
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "fill": false,
+      "hidden": false,
+      "label": "Probe-2 Target",
+      "lineTension": 0.1,
+      "pointBackgroundColor": "#fff",
+      "pointBorderColor": "rgb(200, 0, 0, 1)",
+      "pointBorderWidth": 1,
+      "pointHitRadius": 10,
+      "pointHoverBackgroundColor": "rgb(200, 0, 0, 1)",
+      "pointHoverBorderColor": "rgb(200, 0, 0, 1)",
+      "pointHoverBorderWidth": 2,
+      "pointHoverRadius": 10,
+      "pointRadius": 1,
+      "pointStyle": "line",
+      "spanGaps": false
+    }
   ],
-  "grill1_temp": [
-    70,
-    70,
-    ...
-    177,
-    176
-  ],
-  "probe1_setpoint": [
-    0,
-    0,
-    ...
-    0,
-    0
-  ],
-  "probe1_temp": [
-    0,
-    0,
-    ...
-    0,
-    0
-  ],
-  "probe2_setpoint": [
-    0,
-    0,
-    ...
-    0,
-    0
-  ],
-  "probe2_temp": [
-    0,
-    0,
-    ...
-    0,
-    0
-  ],
+  "probe_mapper": {
+    "primarysp": {
+      "Grill": 2
+    },
+    "probes": {
+      "Grill": 0,
+      "Probe1": 3,
+      "Probe2": 5
+    },
+    "targets": {
+      "Grill": 1,
+      "Probe1": 4,
+      "Probe2": 6
+    }
+  },
   "time_labels": [
-    1665861135559,
-    1665861138875,
-    ...
-    1665881264526,
-    1665881268061
+    1674255152444,
+    1674255155486,
+    1674255158491,
+    1674255161534,
+    1674255167628,
+    1674255170683,
+    1674255173724,
+    1674255177592,
+    1674255180634,
+    1674255185012,
+    1674255190428,
+    1674255194394,
+    1674255197431,
+    1674255200472,
+    1674255204970,
+    1674255211894
   ]
 }
 ```
 
+There are three sections to the graph_data.json structure: 
+1. 'chart_data' : This section contains the chart data for each of the probes, setpoint for the primary probe, and notification targets for all probes formatted for chartjs.  This section can be directly plugged into the 'datasets' portion of the chartjs object. [More information can be found here in the Chartjs documentation.](https://www.chartjs.org/docs/latest/charts/line.html)
+2. 'probe_mapper' : This section contains the mapping to the list items in the chart_data.  From the example above, the 'probe1' temperature can be found at list item 3 (where the list starts from 0).  This is helpful for the WebUI javascript to edit specific datasets. 
+3. 'time_labels' : This is the list of time labels that correspond to the probe datasets, which is directly used by chartjs, converting to a human readable timestamp.  
+
+#### Raw Data
+
+The raw_data.json file contains the raw data from the PiFire history database, which is collected when running.  It's formatted exactly how the data would be formatted in the database.  Each list item / line item, is all the data collected at that specific time time organized by probe and type.  
+
+```json 
+[
+  {
+    "AUX": {},
+    "EXD": {
+      "CR": 0.1875,
+      "RCR": 0.1875
+    },
+    "F": {
+      "Probe1": 208,
+      "Probe2": 206
+    },
+    "NT": {
+      "Grill": 0,
+      "Probe1": 0,
+      "Probe2": 0
+    },
+    "P": {
+      "Grill": 466
+    },
+    "PSP": 0,
+    "T": 1674255152444
+  },
+  {
+    "AUX": {},
+    "EXD": {
+      "CR": 0.1875,
+      "RCR": 0.1875
+    },
+    "F": {
+      "Probe1": 208,
+      "Probe2": 207
+    },
+    "NT": {
+      "Grill": 0,
+      "Probe1": 0,
+      "Probe2": 0
+    },
+    "P": {
+      "Grill": 465
+    },
+    "PSP": 0,
+    "T": 1674255155486
+  },
+  ...
+]
+```
+
+Each item in the list is broken into sections:
+
+- 'T' - Timestamp of when the data was sampled 
+- 'P' - Dictionary of Primary probe temperatures formatted: 'label' : temperature  
+  - **NOTE:** Currently only one primary probe is supported by PiFire, so there should only be one label/value pair.  
+- 'PSP' - Primary Set Point Temperature
+- 'F' - Dictionary of Food probe temperatures formatted: 'label' : temperature
+- 'NT' - Dictionary of Notification Targets, used to track target for notification for each probe.  This should include both food probes and the primary probe.  This is formatted: 'label' : temperature
+- 'AUX' - Dictionary of Auxilliary probe temperatures formatted: 'label' : temperature
+  - **NOTE** - Auxilliary probes are not intended to be displayed on the graph and are to be used by virtual probes, or are just for capturing extra data.  
+- 'EXD' - Dictionary of Extended Data values.  This can contain any number of key : value pairs, and can be used to store extra data used for debug, etc.  
 
 #### Comments
 
@@ -331,7 +710,7 @@ This cookfile format is licensed under the MIT license and is freely available t
 ```
 MIT License
 
-Copyright (c) 2020 - 2022 Ben Parmeter and Contributors
+Copyright (c) 2020 - 2023 Ben Parmeter and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

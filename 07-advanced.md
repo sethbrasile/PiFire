@@ -62,10 +62,11 @@ PiFire offers a basic API to adjust settings or to control the system over the w
 { "globals" : { "grill_name" : "Smokey the Bear" } }
 ```
 
-- POST Control (/api/control): Change any control data from control.json.  Post format identical to the format of the settings.json file.  For ex: 
+- POST Control (/api/control): Change any control data from control.json.  Post format identical to the format of the control data structure in redis.  For ex: 
 
 ```json
-{ "updated" : true, "mode" : "Startup", "setpoints" : { "grill" : 500 } } 
+{ "updated" : true, "mode" : "Startup" } 
 ```
 
-This code will change the mode to 'Startup' and by setting the 'updated' key to 'true', will tell the control script to check for the mode change. The grill setpoint of 500 above, probably wouldn't do anything in this example, but if you were switching to 'Hold' mode, the control script would use 500F as your setpoint for that mode.  
+This code will change the mode to 'Startup' and by setting the 'updated' key to 'true', will tell the control script to check for the mode change.   
+
