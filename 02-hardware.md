@@ -13,7 +13,7 @@ The parts list and setup:
   * [Amazon Link - Mechanical Relay](https://www.amazon.com/JBtek-Channel-Module-Arduino-Raspberry/dp/B00KTEN3TM)
   * [Amazon Link - Solid State Relay Active Low](https://www.amazon.com/DollaTek-Level-Trigger-4-Channel-Module/dp/B07DK6P9CV)
   * [Amazon Link - Solid State Relay Active High](https://www.amazon.com/NOYITO-High-level-Automation-Industrial-Modification/dp/B07BLL4HFD)
-* **Resistors** - (3x) 10k ohm resistors for grill RTD and meat probes resistor divider.  You may want to consider getting some decent quality tolerance resistors for this given that accuracy is important(+/1 1%).  I managed to source some pretty accurate dividers. (1x) 330 Ohm resistor for power selector switch.  (3x) 10k Ohm resistors for optional physical button input, as well as (3x) 1k Ohm resistors.
+* **Resistors** - (3x) 10k ohm resistors for grill RTD and meat probes resistor divider.  You may want to consider getting some decent quality tolerance resistors for this given that accuracy is important(+/1 1%).  I managed to source some pretty accurate dividers.  It was mentioned on Discord by a user(James Cantrell), that using a smaller resistor value for the Primary RTD input (i.e. 1k) and configuring the profile to match this value might be a really good idea.  This, in theory will give you higher accuracy on RTD probes which have a smaller resistance than the typical food probes.  (1x) 330 Ohm resistor for power selector switch.  (3x) 10k Ohm resistors for optional physical button input, as well as (3x) 1k Ohm resistors.
 * **Micro SD Card** - 4GB or greater is required for Raspberry Pi OS Buster and later.
 * **120V AC to 5VDC Power Supply** - In this particular case it's a 5V5A output which can be connected to the relay as well! 
   * [Amazon Link](https://www.amazon.com/gp/product/B07B111B7Y)
@@ -55,6 +55,14 @@ Let me first say that I am not a hardware engineer by trade and thus there may b
 
 Example of basic PiFire wiring (PiSide) with SSD1306 OLED I2C based display.  
 ![Raspberry Pi Wiring w/I2C Display](/img/PiFire-PiSide-Schematic.png)
+
+```note
+If you are using a PT1000 (or Traeger PT100) RTD Probe, it has been pointed out (by Discord user James Cantrell) that using a 1k Ohm resistor would be a much better choice for that input channel instead of the 10k Ohm resistor.  Since PT1000 probes are 1k Ohm at 0 degrees Celsius, this smaller 1k Ohm resistor divider is much more suited to give a wider range of voltage readings into the ADC.  In future hardware designs, this should be something that is taken into consideration.  
+
+If you choose to change this to a 1k ohm resistor, you must remember to change the Rd value (Resistor Divider) in the Probe Profile that you are using.
+
+It should also be noted that there are some food probes out there that use a similar PT1000 profile/resistor (i.e. Pit Boss).  If you plan to use these types of probes, consider modifying the design for those channels to utilize 1k instead of 10k ohm resistor dividers.  
+```
 
 ```note
 There have been questions around the optional switch attached to GPIO17.  This is only used in configurations where you are using both the original controller and the PiFire controller on the same grill.  If you selected standalone during the wizard configuration, then this switch is ignored.  If you selected OEM Controller Present in the wizard configuration, then this switch will control whether PiFire is actively controlling the grill, or the OEM controller is controlling the grill.  This could potentially used to switch between the controllers on the fly, but is generally not recommended.  

@@ -44,23 +44,25 @@ What I did keep from dborello's project was the PID controller which was the hea
 	* _Shutdown Mode_ (auger off, fan on) to burn off pellets after cook is completed
 	* _Monitor Mode_ - See temperatures of grill / probes and get notifications if using another controller or if just checking the temperatures any time.  
 	* _Manual Mode_ - Control fan, auger and igniter manually.  
-	*  __NEW:__ _Prime_ - Allows you to prime the firepot with pellets prior to a cook.  
+	* _Prime_ - Allows you to prime the firepot with pellets prior to a cook.  
 * Supports several different OLED and LCD screens
 	* SSD1306 OLED Display
 	* ST7789 TFT Display
 	* ILI9341 TFT Display (now with more rotation options)
 * Physical Button Input / Control (depending on the display, three button inputs)
 * Encoder support for, so you can control your grill with a spinny knob.
-* One (1) Grill Probe and Two (2) Food Probes
+* One (1) Grill Probe and Many Food Probes
 	* Tunable probe inputs to allow for many different probe manufacturers
+	* Supports the ADS1115 ADC, ADS1015 ADC, and MAX31865 RTD devices for measuring probes
 	* Probe tuning tool to help develop probe profiles
-	* NEW - Up to two (2) grill probes if using the correct PCB design.
-* Cook Timer
+	* NEW - Any number of probe inputs, limited only by the number of devices that the Raspberry Pi can support
+	* Virtual Probes to allow you to do things like averaging probes, finding highest and lowest values of certain probes, etc.  
+* Cook Timer - Moved to the Top Bar for Easy Access
 * Notifications (Grill / Food Probes / Timer)
 	* Supports Apprise, IFTTT, Pushover, and Pushbullet Notification Services
 * Smoke Plus Feature to deliver more smoke during Smoke / Hold modes
 * Safety settings to prevent over-temp, startup failure, or firepot flameout (and overload)
-* __NEW__ Save temperature history for all probes / set points to a cook file that can be updated with images, notes, and even downloaded to your devices.
+* Save temperature history for all probes / set points to a cook file that can be updated with images, notes, and even downloaded to your devices.
 * Wood Pellet Tracking Manager - Now includes estimates of pellet usage.
 * Pellet Level Sensor Support
 	* VL53L0X Time of Flight Sensor
@@ -113,13 +115,15 @@ I've added a discord server [here](https://discord.gg/F9mbCrbrZS) which can be a
 
 ### Credits
 
-Web Application created by Ben Parmeter, copyright 2020, 2021, 2022. Check out my other projects on [github](https://github.com/nebhead). If you enjoy this software and feel the need to donate a cup of coffee, a frosty beer or a bottle of wine to the developer you can click [here](https://paypal.me/benparmeter).
+Web Application created by Ben Parmeter, copyright 2020-2023. Check out my other projects on [github](https://github.com/nebhead). If you enjoy this software and feel the need to donate a cup of coffee, a frosty beer or a bottle of wine to the developer you can click [here](https://paypal.me/benparmeter).
 
 Of course, none of this project would be available without the wonderful and amazing folks below.  If I forgot anyone please don't hesitate to let me know.  
 
 * **PiSmoker** - The project that served as the inspiration for this project and where the PID controller is wholesale borrowed from.  Special mention to Dan for providing encouraging feedback from day one of this project.  Many thanks!  Copyright Dan Borello. [engineeredmusings.com](http://engineeredmusings.com/pismoker/) [github](https://github.com/DBorello/PiSmoker)
 
 * **Circliful** - Beautiful Circle Gauges on the dashboard. Extra special mention for Patric for providing great support to me via GitHub.  Copyright Patric Gutersohn & other contributors. [gutersohn.com](http://gutersohn.com/) [github](https://github.com/pguso/js-plugin-circliful)
+
+* **SVG Gauge** - Credits to Aniket Naik for the excellent SVG-Gauge. Released under the MIT License Copyright (c) 2016 [(github profile)](https://github.com/naikus) [github.com](https://github.com/naikus/svg-gauge)
 
 * **Bootstrap** - WebUI Based on Bootstrap 4.  Bootstrap is released under the MIT license and is copyright 2018 Twitter. [getbootstrap.com](http://getbootstrap.com)
 
@@ -135,6 +139,10 @@ Of course, none of this project would be available without the wonderful and ama
 
 * **ADS1115 Python Module** - Python module to support the ADS1115 16-Bit ADC. Also not actually distributed with this project, but also deserveds recognition.  Copyright David H Hagan. [pypi.com](https://pypi.org/project/ADS1115/) [github.com](https://github.com/vincentrou/ads1115_lib)
 
+* **Other Adafruit Modules** - Multiple Adafruit modules were also leveraged in the making of this project and deserve recognition, even if they aren't distributed in the project.  
+
+* **Contributions from the Community** - Thank you to those of you who have rolled up your sleeves, built out this project and contributed back. Whether that be with contributions to the code, designing new hardware, ideas and suggestions, or with a coffee that you bought me along the way.  Thank you very much, you keep this project running!
+
 ### Licensing
 
 This project is licensed under the MIT license.
@@ -142,7 +150,7 @@ This project is licensed under the MIT license.
 ```
 MIT License
 
-Copyright (c) 2020 - 2022 Ben Parmeter and Contributors
+Copyright (c) 2020 - 2023 Ben Parmeter and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

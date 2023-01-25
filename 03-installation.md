@@ -5,15 +5,23 @@ sort: 3
 ---
 ## Software Installation
 
+### TL;DR Let's Install this thing! 
+
+It's recommended that you read through the documentation below, or watch the setup video. But if you want to just jump right in, then run the below command on your Raspberry Pi to get started.  
+
+```bash
+$ curl https://raw.githubusercontent.com/nebhead/pifire/main/auto-install/install.sh | bash
+```
+
 ### Basic Installation Video
 
 It's recommended to watch the video and follow along with thes steps below, to get you up and running quickly.  
 
 [![YouTube Demo](img\photos\pifire-video-image-sm.jpg)](https://youtu.be/Bena9Yq00VM)
 
-### Raspberry Pi Zero W - Flash and Prepare SD Card
+### Raspberry Pi - Flash and Prepare SD Card
 
-#### Recommended Method: Using the Raspberry Pi Imager (v1.7.x +)
+#### **Recommended Method:** Using the Raspberry Pi Imager (v1.7.x +)
 With the updates to the Raspberry Pi Imager, you can quickly and easily configure and flash your SD Card in just minutes, all in one tool.
 
 1. Open the Raspberry Pi Imager
@@ -27,7 +35,6 @@ With the updates to the Raspberry Pi Imager, you can quickly and easily configur
 	- Select Locale Settings, and configure your timezone and keyboard layout
 	- Click Save
 5. Select Write and wait for the imager to write to the SD Card
-
 
 #### Manual Method: If not using the Raspberry Pi Imager
 
@@ -136,9 +143,11 @@ Click 'Next...' or on the Platform Pill to move to the next step.
 
 #### Select the Platform 
 
-By default, PiFire uses a Raspberry Pi Zero W and the default platform is called PiFire Standard.  If you are testing, you may select the Prototype platform, however for most all users, you should choose the PiFire standard platform.  
+By default, PiFire uses a Raspberry Pi Zero W and the default platform is called PiFire Standard.  If you are testing, you may select the Prototype platform, however for most all users, you should choose the PiFire standard platform.  For adventurous users, there is a PWM Fan version of the PCB (linked in the hardware section), which can be selected here.  
 
 ![Wizard Platform](img/webui/Wizard-01-Platform.png)
+
+Standalone denotes whether PiFire operates solely on it's own or if there is an OEM controller on the grill as well.  Basically, this option will watch the selector switch to see if the user has PiFire selected to operate the grill or has the OEM controller selected.  
 
 At the bottom of this section, you'll need to select that the trigger level should be used for your relays.  Depending on the relays that you have selected for your build, you'll want to choose the right trigger level.  
 
@@ -146,13 +155,64 @@ At the bottom of this section, you'll need to select that the trigger level shou
 Many of the standard mechanical relay modules on the market will be active low.  However for Solid State Relays you may find that there are both active low and active high triggered relays available, so you'll want to make sure you check this and set this accordingly.
 ```
 
-#### Probe Input (ADC)
+#### Probe Input
 
-Next, you'll want to select the type of probe input you are using.  Most installations will be using the ADS1115 ADC for probe input.  
+Next, you'll want to configure the probe input you are using.  Most installations will be using the ADS1115 ADC for probe input.  However, you may have different probe input configurations, or maybe you want to use the MAX31865 for your RTD probe.  This is the the section where you can configure it all.    
 
 ![Wizard Probes](img/webui/Wizard-02-Probes.png)
 
-At the bottom of this section, you have the opportunity to select the temperature units in either Farenheit or Celcius.  Select whichever units you intend to use for this platform.  This can also be changed in the settings at a later time.  
+At the beginning of this section, you have the opportunity to select the temperature units in either Fahrenheit or Celsius.  Select whichever units you intend to use for this platform.  This can also be changed in the settings at a later time.  
+
+Next you will see the Probe Devices list. By default, PiFire selects the ADS1115 ADC for the main probe device, but you can also remove this and add a different device, or you can add onto this with more devices (limited only by the amount of devices your hardware can handle).  This is also where you might select a virtual device, but more on that later.    
+
+![Wizard Probes](img/webui/Wizard-02-Probe-Device.png)
+
+When adding a new device, click the plus icon in this section, then select the device you want to add from the drop-down.  Give your device a unique name, configure any device specific settings and click save.
+
+![Wizard Probes](img/webui/Wizard-02-Probes-Config.png)
+
+Next is the probe configuration.  In this section, you can define what probes you want PiFire to use.  By default, PiFire selects three probes: Grill(Primary), Probe-1(Food), Probe-2(Food).  These are mapped to the default ADS1115 ports from the previous section.  You can choose to edit/delete any of the existing ports, or you can add new probes. 
+
+![Wizard Probes](img/webui/Wizard-02-Probes-Config-AddEdit.png)
+
+When adding or editing a new probe, you'll need to choose the correct configuration for the new probe.  First you'll be asked to select a unique name for the probe, which will be used in the UI for PiFire.  This should be a unique name and not match other probe names.  Note: PiFire will also generally remove spaces and special characters to create a label for the probe, which cannot match another probe label.  
+
+Select a device & port for the probe to use.  This is a drop down selection that will list all devices and available ports for those devices.  (i.e. ADS1115 > ADC0)
+
+Next select the Probe Type.  Probe Types are define as follows:
+- **Food** - Used as a food probe to track the temperature of food items.  This probe will be displayed in the UI and tracked in the history.  
+- **Primary** - used as the primary probe to control the grill/smoker in hold mode, etc.  There must be one Primary probe and only one.  This probe is displayed in the UI and tracked in the history.  
+- **Aux** - Auxillary temperature input which is not displayed in the UI, but will be tracked in the history database.  Aux can be used for Virtual Probe Devices.  More on that later. 
+
+Next, select a Probe Profile for this particular probe.  This is mainly utilized for ADC devices, and can be ignored for RTD style devices and Virtual Devices.  Note that probe profiles can be changed in the settings later on.  
+
+Lastly, select whether the probe should be enabled and visible in the UI. This setting currently isn't being honored by PiFire, but may at a future date.  Note that if the probe is an Aux probe it will not be displayed in the UI, regardless of this setting.  
+
+##### Virtual Devices
+
+Virtual Devices can be used if you want to take input from multiple probes and perform some kind of math on those devices, which is output to a virtual port.  
+
+For example, if you would like to have two grill/primary probes, that are in two different places in the cooking chamber and you want to average those two (or maybe take the highest/lowest or median temperature) to use that.  Or perhaps you want to have a Virtual Probe that takes input from 2-3 different food probes uses that to create an average temperature for a large piece of meat.  This is all possible now!  
+
+![Wizard Probes](img/webui/Wizard-02-Probes-Virtual-Device.png)
+
+To add a Virtual Device, go to the Probe Devices section and click on the plus button.  Select the type of virtual device you'd like (currently available: Average, Highest, Lowest, Mean).  
+
+From there, you can select which probes you want included in the math operation that is going to be performed.  Use 'ctrl' clicks to select more than one probe.  
+
+Next you need to give a unique device name to this Virtual Device.  
+
+Then click Save.  
+
+Next go to the Probe Configuration section and add a probe by clicking plus.  In the pop-up window, configure a probe as normal, but select your newly created Virtual Device & port i.e. 'VirtualProbesAverage > VIRT0'.  
+
+Then click Save, and you've created a brand new virtual probe!  
+
+```note
+Ordering of probes in the probe configuration list is very important.  Virtual Probes must come **after** the probes that are being used for input to that probe.  For example, if you have Probe-1 and Probe-2 being used by your Virtual Device / Port, then your Probe-3 using VIRT0, should come after Probe-1 and Probe-2 in the probe configuration list.  PiFire should do this automatically, but it's good to know in case any errors are experienced.
+
+Theoretically, virtual probes can be stacked, meaning if you want to use a virtual probe as input into another virtual probe that should be possible, as long as the inputs from one virtual probe into the other are first in the probe configuration list.  
+```
 
 #### Display & Button Input
 
