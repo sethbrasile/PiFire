@@ -173,7 +173,7 @@ When adding a new device, click the plus icon in this section, then select the d
 
 Next is the probe configuration.  In this section, you can define what probes you want PiFire to use.  By default, PiFire selects three probes: Grill(Primary), Probe-1(Food), Probe-2(Food).  These are mapped to the default ADS1115 ports from the previous section.  You can choose to edit/delete any of the existing ports, or you can add new probes. 
 
-![Wizard Probes](img/webui/Wizard-02-Probes-Config-AddEdit.png)
+![Wizard Probes](img/webui/Wizard-02-Probes-Config-Edit.png)
 
 When adding or editing a new probe, you'll need to choose the correct configuration for the new probe.  First you'll be asked to select a unique name for the probe, which will be used in the UI for PiFire.  This should be a unique name and not match other probe names.  Note: PiFire will also generally remove spaces and special characters to create a label for the probe, which cannot match another probe label.  
 
