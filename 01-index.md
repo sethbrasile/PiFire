@@ -70,7 +70,8 @@ What I did keep from dborello's project was the PID controller which was the hea
 * Socket IO for Android Application Support _(GitHub User [@weberbox](https://github.com/weberbox) has made a Android client app under development here: [https://github.com/weberbox/PiFire-Android](https://github.com/weberbox/PiFire-Android))_
 * NEW! Recipes / Recipe Mode - Integrated recipe creation and a new mode for developing a recipe 'program' that will control the grill for you and follow the recipe that was programmed.  
 * NEW! Updated and re-written dashboards.  The dashboard has been refreshed with a new look.  New 'basic' and 'default' dashboards. If you are technically inclined, you can even develop your own dashboard.  
-* NEW! Control panel everywhere! Allow your control panel to be displayed on almost all pages in PiFire.  
+* NEW! Control panel everywhere! Allow your control panel to be displayed on almost all pages in PiFire.
+* NEW! Lid open detection during hold mode to pause the controller and prevent overshoots.  
 * ...And much more!  
 
 ### Screenshots & Videos
