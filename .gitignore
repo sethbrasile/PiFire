@@ -52,3 +52,9 @@ pelletdb.json
 static/js/backups/
 
 history/
+
+logs/
+
+recipes/recipe/
+
+static/img/tmp/

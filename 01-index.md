@@ -4,7 +4,7 @@ permalink: /
 sort: 1
 ---
 # ![PiFireIcon](/img/launcher-icon-1x.png) PiFire
-## Raspberry Pi Zero (1 or 2) W Based Smoker Grill Controller 
+## Raspberry Pi Based Smoker Grill Controller 
 
 ```danger
 The creator of this project takes no responsibility for any damage that you may do to your personal property including modifications to your smoker grill if you choose to use this project.  The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.*  ***This project is provided for educational purposes, and should be attempted only by individuals who wish to assume all risks involved.***
@@ -30,9 +30,9 @@ I made some other choices that diverged from the PiSmoker project as well.
 3. Instead of using the MAX31865 RTD ADC, I'm using an off the shelf ADC solution based on the ADS1115 device which seems to be readily available on sites like Amazon and Adafruit.  It also supports I2C, which makes the hardware design easier in my humble opinion. This does make the code a little more fiddley, because we will need to find and use coefficients for each probe type and the Steinhart-Hart formula to calculate temperatures reasonably accurately. Many thanks to the HeaterMeter project for providing inspiration on both the hardware and software implementation. [https://github.com/CapnBry/HeaterMeter](https://github.com/CapnBry/HeaterMeter)
 4. Instead of using the LCD Display from Adafruit, I'm using a cheap and ubiquitous OLED device (SSD1306) that I happened to have on hand already.  It also supports I2C, so again less hardware design necessary to get things designed into the project.  It also can be supported via either the Adafruit Python libraries or the Luma Python libraries (which I used for this project).  This display is frankly very small and someday, I may consider upgrading to something a bit larger, but for now, I'm reasonably happy.  
 5. As mentioned above, since this thing sits along side the existing controller, I designed this to use more relays to allow for selecting between the two.  This certainly can be modified to ignore the existing controller altogether, but I didn't want to be without my grill while I fiddled with this project.
-6. Another software choice was to modify the OS install such that the /tmp folder is RAM.  This way, I can store much of the history and control data in memory instead of writing to the flash device constantly and causing it to wear out.  Luckily, this is a pretty simple prospect with Rasperry Pi OS and is handled in the setup below.  
+6. Another software choice was to modify the OS install such that the /tmp folder is RAM.  This way, I can store much of the history and control data in memory instead of writing to the flash device constantly and causing it to wear out.  Luckily, this is a pretty simple prospect with Raspberry Pi OS and is handled in the setup below.  
 
-What I did keep from dborello's project was the PID controller which was the heart of the project.  This file is largely untouched from his project intentionally so that I could retain the goodness and legacy of his great work.  This project itself would not be possible without his pathfinding and generous sharing of the knowledge.
+What I did keep from dborello's project was the PID controller which was the heart of the project.  This file is largely untouched from his project intentionally so that I could retain the goodness and legacy of his great work.  This project itself would not be possible without his path-finding and generous sharing of the knowledge.
 
 ### Features
 
@@ -68,6 +68,9 @@ What I did keep from dborello's project was the PID controller which was the hea
 	* VL53L0X Time of Flight Sensor
 	* HCSR04 Ultrasonic Sensor
 * Socket IO for Android Application Support _(GitHub User [@weberbox](https://github.com/weberbox) has made a Android client app under development here: [https://github.com/weberbox/PiFire-Android](https://github.com/weberbox/PiFire-Android))_
+* NEW! Recipes / Recipe Mode - Integrated recipe creation and a new mode for developing a recipe 'program' that will control the grill for you and follow the recipe that was programmed.  
+* NEW! Updated and re-written dashboards.  The dashboard has been refreshed with a new look.  New 'basic' and 'default' dashboards. If you are technically inclined, you can even develop your own dashboard.  
+* NEW! Control panel everywhere! Allow your control panel to be displayed on almost all pages in PiFire.  
 * ...And much more!  
 
 ### Screenshots & Videos

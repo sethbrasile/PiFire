@@ -13,7 +13,7 @@ The parts list and setup:
   * [Amazon Link - Mechanical Relay](https://www.amazon.com/JBtek-Channel-Module-Arduino-Raspberry/dp/B00KTEN3TM)
   * [Amazon Link - Solid State Relay Active Low](https://www.amazon.com/DollaTek-Level-Trigger-4-Channel-Module/dp/B07DK6P9CV)
   * [Amazon Link - Solid State Relay Active High](https://www.amazon.com/NOYITO-High-level-Automation-Industrial-Modification/dp/B07BLL4HFD)
-* **Resistors** - (3x) 10k ohm resistors for grill RTD and meat probes resistor divider.  You may want to consider getting some decent quality tolerance resistors for this given that accuracy is important(+/1 1%).  I managed to source some pretty accurate dividers.  It was mentioned on Discord by a user(James Cantrell), that using a smaller resistor value for the Primary RTD input (i.e. 1k) and configuring the profile to match this value might be a really good idea.  This, in theory will give you higher accuracy on RTD probes which have a smaller resistance than the typical food probes.  (1x) 330 Ohm resistor for power selector switch.  (3x) 10k Ohm resistors for optional physical button input, as well as (3x) 1k Ohm resistors.
+* **Resistors** - (3x) 10k ohm resistors for grill RTD and meat probes resistor divider.  You may want to consider getting some decent quality tolerance resistors for this given that accuracy is important(+/1 1%).  I managed to source some pretty accurate dividers.  It was mentioned on Discord by a user(James Cantrell), that using a smaller resistor value for the Primary RTD input (i.e. 1k) and configuring the profile to match this value might be a really good idea.  This, in theory will give you higher accuracy on RTD probes which have a smaller resistance than the typical food probes.  This is true for any PT1000 style probe, including some Pit Boss probes that have a similar resistance.  (1x) 330 Ohm resistor for power selector switch.  (3x) 10k Ohm resistors for optional physical button input, as well as (3x) 1k Ohm resistors.
 * **Micro SD Card** - 4GB or greater is required for Raspberry Pi OS Buster and later.
 * **120V AC to 5VDC Power Supply** - In this particular case it's a 5V5A output which can be connected to the relay as well! 
   * [Amazon Link](https://www.amazon.com/gp/product/B07B111B7Y)
@@ -29,6 +29,8 @@ The parts list and setup:
   * [Amazon Link](https://www.amazon.com/gp/product/B071KX71SV)
 
 #### Display Options
+
+PiFire doesn't require a display to be attached, but it is a nice addition to have.  
 
 * **SSD1306** - Standard 1" OLED display with I2C interface (64Hx128W).  It's pretty tiny, but it does the job and it can be found very cheap if you are willing to order direct from China.  This is what was used for the initial/default implementation on the PiFire project. 
   * [Amazon Link](https://www.amazon.com/UCTRONICS-SSD1306-Self-Luminous-Display-Raspberry/dp/B072Q2X2LL)
@@ -125,6 +127,10 @@ _Figure A: PiFire w/Existing Controller_
 _Figure B: PiFire Standalone_
 ![Relay & Power Wiring Standalone](/img/PiFire-StandAlone-Relay-Schematic.jpg)
 
+```note
+In the above figures A&B, the 5V DC Power Supply is show with Neutral and Hot(L) inputs.  AC power should not be connected to the DC outputs of this power supply, or it may experience damage. 
+```
+
 #### Physical Button Input
 
 For Physical Button Input, the following is an example of how tactile switches can be wired, with pullups.
@@ -139,16 +145,16 @@ For Physical Button Input, the following is an example of how tactile switches c
 
 #### Raspberry Pi GPIO / PIN Mapping
 
-__Relay Control (defined in common.py):__
+__Relay Control (defined in settings.json):__
 * **GPIO 4** - Power (controls power to the outputs, between the existing controller and the PiFire controller)
 * **GPIO 14** - Auger Relay - Controls the Auger on/off.
 * **GPIO 15** - Fan Relay - Controls Fan on/off.
 * **GPIO 18** - Igniter Relay - Controls Igniter on/off.
 
-__Switch Input (defined in common.py):__
+__Switch Input (defined in settings.json):__
 * **GPIO 17** - Switch Input for system on/off
 
-__Button Input (defined in display_xxxxb.py modules):__
+__Button Input (defined in settings.json modules):__
 * **GPIO 16** - Up Input Button
 * **GPIO 20** - Down Input Button
 * **GPIO 21** - Enter Input Button
@@ -176,7 +182,7 @@ With a food probe attached:
 ![HW Enclosure & Display](/img/photos/HW-NEW-04.jpg)
 
 ```note
-If you're interested in seeing more builds from other users, we have a discussions thread [here](https://github.com/nebhead/PiFire/discussions/28) where others have posted pictures of their unique builds.  
+If you're interested in seeing more builds from other users, we have a discussions thread [here](https://github.com/nebhead/PiFire/discussions/28) where others have posted pictures of their unique builds.  In addition to the discussions thread above, the [discord server](https://discord.gg/F9mbCrbrZS) is a great place to see and share build photos and experiences. 
 ```
 
 #### 3D Printer Files

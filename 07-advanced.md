@@ -28,6 +28,8 @@ More to come in this section.
 
 PiFire offers a basic API to adjust settings or to control the system over the wire.  This API is used by the dashboard javascript to control the grill, which can be used as a reference for others build apps, dashboards or even other hardware that interfaces with the system.  
 
+The API has changed since v1.5.0 to include more flexibility of probe definitions and types.  
+
 - GET Settings (/api/settings): Dumps all of the current settings from settings.json in JSON format
 - GET Control (/api/control): Dumps all of the current control from control.json in JSON format
 - GET Current (/api/current): Dumps JSON of some key current activity, for ex:
@@ -35,22 +37,70 @@ PiFire offers a basic API to adjust settings or to control the system over the w
 ```json 
 {
   "current": {
-    "grill_temp": "0", 
-    "probe1_temp": "0", 
-    "probe2_temp": "0"
-  }, 
-  "setpoints": {
-    "grill": 0, 
-    "probe1": 0, 
-    "probe2": 0
-  }, 
+    "F": {
+      "Probe1": 0,
+      "Probe2": 0
+    },
+    "NT": {
+      "Grill": 0,
+      "Probe1": 0,
+      "Probe2": 0
+    },
+    "P": {
+      "Grill": 0
+    },
+    "PSP": 0
+  },
+  "notify_data": [
+    {
+      "keep_warm": false,
+      "label": "Grill",
+      "name": "Grill",
+      "req": false,
+      "shutdown": false,
+      "target": 0,
+      "type": "probe"
+    },
+    {
+      "keep_warm": false,
+      "label": "Probe1",
+      "name": "Probe-1",
+      "req": false,
+      "shutdown": false,
+      "target": 0,
+      "type": "probe"
+    },
+    {
+      "keep_warm": false,
+      "label": "Probe2",
+      "name": "Probe-2",
+      "req": false,
+      "shutdown": false,
+      "target": 0,
+      "type": "probe"
+    },
+    {
+      "keep_warm": false,
+      "label": "Timer",
+      "req": false,
+      "shutdown": false,
+      "type": "timer"
+    },
+    {
+      "keep_warm": false,
+      "label": "Hopper",
+      "last_check": 0,
+      "req": true,
+      "shutdown": false,
+      "type": "hopper"
+    }
+  ],
   "status": {
-    "mode": "Stop", 
-    "name": "Smokey Bear", 
-    "pelletlevel": 80, 
-    "pellets": "Generic Alder", 
-    "s_plus": true, 
-    "status": "", 
+    "mode": "Stop",
+    "name": "Production",
+    "s_plus": true,
+    "status": "",
+    "ui_hash": -1786823920,
     "units": "F"
   }
 }
@@ -68,5 +118,4 @@ PiFire offers a basic API to adjust settings or to control the system over the w
 { "updated" : true, "mode" : "Startup" } 
 ```
 
-This code will change the mode to 'Startup' and by setting the 'updated' key to 'true', will tell the control script to check for the mode change.   
-
+This code will change the mode to 'Startup' and by setting the 'updated' key to 'true', will tell the control script to check for the mode change.

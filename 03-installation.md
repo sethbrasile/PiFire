@@ -15,7 +15,11 @@ $ curl https://raw.githubusercontent.com/nebhead/pifire/main/auto-install/instal
 
 ### Basic Installation Video
 
-It's recommended to watch the video and follow along with thes steps below, to get you up and running quickly.  
+It's recommended to watch the video and follow along with these steps below, to get you up and running quickly.  
+
+```note
+This install video is for previous versions, but is still generally relevant.
+```
 
 [![YouTube Demo](img\photos\pifire-video-image-sm.jpg)](https://youtu.be/Bena9Yq00VM)
 
@@ -35,6 +39,12 @@ With the updates to the Raspberry Pi Imager, you can quickly and easily configur
 	- Select Locale Settings, and configure your timezone and keyboard layout
 	- Click Save
 5. Select Write and wait for the imager to write to the SD Card
+
+#### **NEW!** PiFire OS Option
+
+Github user @calonmerc has created a PiFire OS image that can be flashed and used without the below installation necessary. Just flash, boot, configure and go!  
+
+Start [here](https://github.com/calonmerc/PiFireOS) for the image download and detailed instructions on how to flash and get up and running.  *Many thanks to @calonmerc for his ongoing contributions to the project!* 
 
 #### Manual Method: If not using the Raspberry Pi Imager
 
@@ -164,8 +174,6 @@ Next, you'll want to configure the probe input you are using.  Most installation
 At the beginning of this section, you have the opportunity to select the temperature units in either Fahrenheit or Celsius.  Select whichever units you intend to use for this platform.  This can also be changed in the settings at a later time.  
 
 Next you will see the Probe Devices list. By default, PiFire selects the ADS1115 ADC for the main probe device, but you can also remove this and add a different device, or you can add onto this with more devices (limited only by the amount of devices your hardware can handle).  This is also where you might select a virtual device, but more on that later.    
-
-![Wizard Probes](img/webui/Wizard-02-Probe-Device.png)
 
 When adding a new device, click the plus icon in this section, then select the device you want to add from the drop-down.  Give your device a unique name, configure any device specific settings and click save.
 
