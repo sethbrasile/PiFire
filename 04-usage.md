@@ -93,7 +93,7 @@ The profile editor allows you to modify the existing probe profiles or add your 
 ![Settings](/img/webui/PiFire-Settings-Profiles.png)
 
 When adding a new profile, these are the configurable settings:
-* _Unique ID_ - This can be really anything, but it should be unique and typically one word or multiple words without spaces so that it's machine readable.  This is used by PiFire to sort the list, identify a profile and load a profile internally.  
+
 * _Name_ - More free-form text field for the human readable name. I've chosen to put dashes between words, but it's probably not necessary.
 * _Vs_ - This is the voltage of the source.  Because we're dealing with calculating temperature, precision is important.  Thus, just using 3.3V for the source voltage could throw off the resistor divider calculations, given you a different calculated resistance across the probe.  This could lead to inaccurate temperature readings.  It is highly recommended to use a multimeter to measure the voltage source on the 3.3V rail.  For the defaults in PiFire, I've used 3.28V which is what I measure on my build.  
 * _Rd_ - This is the value of your R1 resistor in Ohms in the resistor divider circuit.  As mentioned in the hardware parts list, you should try to get a resistor that has good tolerance to ensure accuracy.  However, if you have resistors that might slightly off, you can modify the value here.  In addition, if you plan to use RTD type probes with a nominal 1k resistance paired with 1k resistors in the resistor divider, then modify this setting here.  You may want to name the profile appropriately if you change this value.    
