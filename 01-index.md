@@ -67,7 +67,7 @@ What I did keep from dborello's project was the PID controller which was the hea
 * Pellet Level Sensor Support
 	* VL53L0X Time of Flight Sensor
 	* HCSR04 Ultrasonic Sensor
-* Socket IO for Android Application Support _(GitHub User [@weberbox](https://github.com/weberbox) has made a Android client app under development here: [https://github.com/weberbox/PiFire-Android](https://github.com/weberbox/PiFire-Android))_
+* Socket IO for Android Application Support _(GitHub User [@weberbox](https://github.com/weberbox) has made a Android client app under development here: [https://github.com/weberbox/PiFire-Android](https://github.com/weberbox/PiFire-Android))_ (NOTE: Due to the large amount of architectural changes in v1.5.0, the Android App update is still in development.  The current version of PiFire has implemented a compatibility layer so that it doesn't break compatibility with the current Android App.  If you have a non-standard probe setup or more than two food probes, you may see issues.  There may still be bugs, so please do submit issues on GitHub if you experience any.)
 * NEW! Recipes / Recipe Mode - Integrated recipe creation and a new mode for developing a recipe 'program' that will control the grill for you and follow the recipe that was programmed.  
 * NEW! Updated and re-written dashboards.  The dashboard has been refreshed with a new look.  New 'basic' and 'default' dashboards. If you are technically inclined, you can even develop your own dashboard.  
 * NEW! Control panel everywhere! Allow your control panel to be displayed on almost all pages in PiFire.
