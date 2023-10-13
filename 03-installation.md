@@ -9,6 +9,10 @@ sort: 3
 
 It's recommended that you read through the documentation below, or watch the setup video. But if you want to just jump right in, then run the below command on your Raspberry Pi to get started.  
 
+```warning
+**IMPORTANT**: As of 10/10/2023, Raspberry Pi OS was updated to Debian Bookworm, which brought many breaking changes to the install process.  PiFire will eventually be updated to support the latest version of Raspberry Pi OS, however for the time being new installations should use the "Legacy" 32-Bit Raspberry Pi OS Lite based on Debian Bullseye.  
+```
+
 ```bash
 $ curl https://raw.githubusercontent.com/nebhead/pifire/main/auto-install/install.sh | bash
 ```
@@ -31,6 +35,11 @@ With the updates to the Raspberry Pi Imager, you can quickly and easily configur
 1. Open the Raspberry Pi Imager
 2. Select the Raspberry Pi OS
 	- Under Raspberry Pi OS (other), select the Raspberry Pi OS Lite (32-Bit)
+
+```warning
+**IMPORTANT**: As of 10/10/2023, Raspberry Pi OS was updated to Debian Bookworm, which brought many breaking changes to the install process.  PiFire will eventually be updated to support the latest version of Raspberry Pi OS, however for the time being new installations should use the "Legacy" 32-Bit Raspberry Pi OS Lite based on Debian Bullseye.  
+```
+
 3. Select the Storage Device (SD Card)
 4. Select the 'Cog' icon in the lower right corner
 	- Select Hostname (enter: pifire)
