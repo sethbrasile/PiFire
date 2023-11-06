@@ -9,10 +9,6 @@ sort: 3
 
 It's recommended that you read through the documentation below, or watch the setup video. But if you want to just jump right in, then run the below command on your Raspberry Pi to get started.  
 
-```warning
-**IMPORTANT**: As of 10/10/2023, Raspberry Pi OS was updated to Debian Bookworm, which brought many breaking changes to the install process.  PiFire will eventually be updated to support the latest version of Raspberry Pi OS, however for the time being new installations should use the "Legacy" 32-Bit Raspberry Pi OS Lite based on Debian Bullseye.  
-```
-
 ```bash
 $ curl https://raw.githubusercontent.com/nebhead/pifire/main/auto-install/install.sh | bash
 ```
@@ -35,11 +31,6 @@ With the updates to the Raspberry Pi Imager, you can quickly and easily configur
 1. Open the Raspberry Pi Imager
 2. Select the Raspberry Pi OS
 	- Under Raspberry Pi OS (other), select the Raspberry Pi OS Lite (32-Bit)
-
-```warning
-**IMPORTANT**: As of 10/10/2023, Raspberry Pi OS was updated to Debian Bookworm, which brought many breaking changes to the install process.  PiFire will eventually be updated to support the latest version of Raspberry Pi OS, however for the time being new installations should use the "Legacy" 32-Bit Raspberry Pi OS Lite based on Debian Bullseye.  
-```
-
 3. Select the Storage Device (SD Card)
 4. Select the 'Cog' icon in the lower right corner
 	- Select Hostname (enter: pifire)
@@ -182,7 +173,13 @@ Next, you'll want to configure the probe input you are using.  Most installation
 
 At the beginning of this section, you have the opportunity to select the temperature units in either Fahrenheit or Celsius.  Select whichever units you intend to use for this platform.  This can also be changed in the settings at a later time.  
 
-Next you will see the Probe Devices list. By default, PiFire selects the ADS1115 ADC for the main probe device, but you can also remove this and add a different device, or you can add onto this with more devices (limited only by the amount of devices your hardware can handle).  This is also where you might select a virtual device, but more on that later.    
+Next you will see the Probe Devices list. By default, PiFire selects the ADS1115 ADC for the main probe device, but you can also remove this and add a different device, or you can add onto this with more devices (limited only by the amount of devices your hardware can handle).  This is also where you might select a virtual device, but more on that later. 
+
+```note
+If you are using the ADC1115, it's important to click on the 'edit' button to configure the settings, such as the resistor divider and voltage source settings.  
+```
+
+![Wizard Probe Device Settings](img/webui/Wizard-02-Probes-Device-Settings.jpg)
 
 When adding a new device, click the plus icon in this section, then select the device you want to add from the drop-down.  Give your device a unique name, configure any device specific settings and click save.
 
