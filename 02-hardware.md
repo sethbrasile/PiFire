@@ -32,8 +32,8 @@ The parts list and setup:
 
 PiFire doesn't require a display to be attached, but it is a nice addition to have.  
 
-* **SSD1306** - Standard 1" OLED display with I2C interface (64Hx128W).  It's pretty tiny, but it does the job and it can be found very cheap if you are willing to order direct from China.  This is what was used for the initial/default implementation on the PiFire project. 
-  * [Amazon Link](https://www.amazon.com/UCTRONICS-SSD1306-Self-Luminous-Display-Raspberry/dp/B072Q2X2LL)
+* **SSD1306** - Standard 1" OLED display with I2C interface (64Hx128W).  It's pretty tiny, but it does the job and it can be found very cheap if you are willing to order direct from China.  This is what was used for the initial/default implementation on the PiFire project. Make sure you get the all-white display and not the two-color (yellow/blue) display.  Example linked below. 
+  * [Amazon Link](https://www.amazon.com/Hosyond-Display-Self-Luminous-Compatible-Raspberry/dp/B09T6SJBV5/)
 
 * **ILI9341 Based Display** - Many versions of this display are available from different sources.  I've built the ILI9341 support around the 240Hx320W SPI version of this.
   * [Amazon Link](https://www.amazon.com/Display-Module-240320-4-Wire-Screen/dp/B07KPD4DHD)
