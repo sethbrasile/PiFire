@@ -32,18 +32,18 @@ The parts list and setup:
 
 PiFire doesn't require a display to be attached, but it is a nice addition to have.  
 
-* **SSD1306** - Standard 1" OLED display with I2C interface (64Hx128W).  It's pretty tiny, but it does the job and it can be found very cheap if you are willing to order direct from China.  This is what was used for the initial/default implementation on the PiFire project. Make sure you get the all-white display and not the two-color (yellow/blue) display.  Example linked below. 
+* **SSD1306** - Standard 1" OLED display with I2C interface (64Hx128W).  It's pretty tiny, but it does the job and it can be found very cheap if you are willing to order direct from China.  This is what was used for the initial/default implementation on the PiFire project. Make sure you get the all-white display and not the two-color (yellow/blue) display.  Example linked below.  (Raspberry Pi I2C Pin Mapping listed below)
   * [Amazon Link](https://www.amazon.com/Hosyond-Display-Self-Luminous-Compatible-Raspberry/dp/B09T6SJBV5/)
 
 * **ILI9341 Based Display** - Many versions of this display are available from different sources.  I've built the ILI9341 support around the 240Hx320W SPI version of this.
-  * [Amazon Link](https://www.amazon.com/Display-Module-240320-4-Wire-Screen/dp/B07KPD4DHD)
+  * [Amazon Link](https://www.amazon.com/Display-Module-240320-4-Wire-Screen/dp/B07KPD4DHD)  (Pin Mapping listed below)
 
 * **ST7789 Based Display** - Again, many revisions of this are available from many different sources.  The specific screen that I have built support on is from Waveshare, with a 240x240 screen and SPI interface. 
   * [Amazon Link](https://www.amazon.com/gp/product/B07MH93747)
 
 #### Optional Hopper Sensors
 
-* **VL53L0X** - Time of flight sensor with I2C interface.  This sensor allows the ability to measure the hopper pellet level quite easily and reliably. While it can be a bit expensive on Amazon, this can be obtained from other vendors (directly from China) for relatively cheap.
+* **VL53L0X** - Time of flight sensor with I2C interface.  This sensor allows the ability to measure the hopper pellet level quite easily and reliably. While it can be a bit expensive on Amazon, this can be obtained from other vendors (directly from China) for relatively cheap. (Raspberry Pi I2C Pin Mapping listed below)
   * [Amazon Link](https://www.amazon.com/gp/product/B071DW8M8V)
 
 * **HCSR04** - Ultrasonic Sensor with GPIO interface.  This sensor hasn't been tested, but the module support is provided for potential use/testing if desired. These sensors are cheap and ubiquitous.  
@@ -145,19 +145,51 @@ For Physical Button Input, the following is an example of how tactile switches c
 
 #### Raspberry Pi GPIO / PIN Mapping
 
-__Relay Control (defined in settings.json):__
+##### Relay Control (defined in settings.json):
+
 * **GPIO 4** - Power (controls power to the outputs, between the existing controller and the PiFire controller)
 * **GPIO 14** - Auger Relay - Controls the Auger on/off.
 * **GPIO 15** - Fan Relay - Controls Fan on/off.
 * **GPIO 18** - Igniter Relay - Controls Igniter on/off.
 
-__Switch Input (defined in settings.json):__
+#####Switch Input (defined in settings.json):
+
 * **GPIO 17** - Switch Input for system on/off
 
-__Button Input (defined in settings.json modules):__
+##### Button Input (defined in settings.json modules):
+
 * **GPIO 16** - Up Input Button
 * **GPIO 20** - Down Input Button
 * **GPIO 21** - Enter Input Button
+* **3.3V** - Any 3.3V rail pin
+* **GND** - Any ground pin
+
+##### Rotary Encoder Input (defined in settings.json modules):
+
+* **GPIO 16** - CLK (Clock)
+* **GPIO 20** - DT (Data)
+* **GPIO 21** - SW (Switch)
+* **3.3V** - Any 3.3V rail pin
+* **GND** - Any ground pin
+
+##### SPI Display Pins (ILI9341, etc.):
+
+* **Board Pin 21** - MISO
+* **GPIO 5** - LED
+* **Board Pin 23** - SCK (SCLK)
+* **Board Pin 19** - MOSI
+* **GPIO 24** - DC
+* **GPIO 25** - RST (Reset)
+* **Board Pin 24** - CS (Chip Select, AKA Chip Enable or CE0)
+* **Vcc** - This should be 3.3V, however, some have noted that the ILI9341 are 5V tolerant and have a brighter display when connected to 5V.  YMMV, so proceed with caution.
+* **GND** - Any ground pin
+
+##### I2C Pins (SSD1306, VL):
+
+* **Board Pin 3** - SDA
+* **Board Pin 5** - SCL
+* **3.3V** - Any 3.3V rail pin
+* **GND** - Any ground pin
 
 ### The Hardware in Pictures
 
