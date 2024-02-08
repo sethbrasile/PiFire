@@ -58,3 +58,9 @@ logs/
 recipes/recipe/
 
 static/img/tmp/
+
+backups/manifest.json
+
+backups/
+
+*.bak
