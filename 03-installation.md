@@ -30,7 +30,7 @@ With the updates to the Raspberry Pi Imager, you can quickly and easily configur
 
 1. Open the Raspberry Pi Imager
 2. Select the Raspberry Pi OS
-	- Under Raspberry Pi OS (other), select the Raspberry Pi OS Lite (32-Bit)
+	- Under Raspberry Pi OS (other), select the Raspberry Pi OS Lite (32-Bit) (Note that the installer has been updated to support Bookworm)
 3. Select the Storage Device (SD Card)
 4. Select the 'Cog' icon in the lower right corner
 	- Select Hostname (enter: pifire)
@@ -40,7 +40,7 @@ With the updates to the Raspberry Pi Imager, you can quickly and easily configur
 	- Click Save
 5. Select Write and wait for the imager to write to the SD Card
 
-#### **NEW!** PiFire OS Option
+#### PiFire OS Option
 
 Github user @calonmerc has created a PiFire OS image that can be flashed and used without the below installation necessary. Just flash, boot, configure and go!  
 
@@ -91,18 +91,10 @@ Once raspi-config is open, the following should be configured at a minimum.
 
 3. Replace Hostname with a unique hostname ('i.e. pifire')
 
-4. Optionally Enable I2C under Interfacing Options
-
-	* Use the down arrow to select Interfacing Options
-	* Arrow down to I2C
-	* Select yes when it asks you to enable I2C
-	* Also select yes when it asks about automatically loading the kernel module
-	* Use the right arrow to select the 'finish' button
-
-5. Finish and reboot
+4. Finish and reboot
 
 ```tip
-It's also a great idea to run update/upgrade on intial setup.  The auto-install script does this for you as well, but will go faster if this has already been done.
+It's also a great idea to run update/upgrade on initial setup.  The auto-install script does this for you as well, but will go faster if this has already been done.
 ```
 
 ### Automatic PiFire Installation

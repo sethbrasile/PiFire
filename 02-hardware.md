@@ -8,18 +8,18 @@ sort: 2
 ### The Parts List
 The parts list and setup:
 
-* **Raspberry Pi Zero W** - Technically any Raspberry Pi with WiFi will do fine, but for this application a Raspberry Pi Zero W works really well and is the right price.  With the release of Raspberry Pi Zero W 2, this is an even better option for PiFire.  The upgraded processing power really helps performance and is especially notably faster on boot-up.  
+* **Raspberry Pi** - Any Raspberry Pi with WiFi will do fine, but for this application a Raspberry Pi Zero W works really well and is the right price.  With the release of Raspberry Pi Zero W 2, this is an even better option for PiFire.  The upgraded processing power really helps performance and is especially notably faster on boot-up.  Keep in mind that for v2.x and v3.x PCB designs, a riser would be required for the full size Raspberry Pi boards to avoid conflicting with the Network and USB stacks. 
 * **4-Channel Relay** - Needed for controlling all of the 120V outputs (Fan, Auger, Igniter, Power).  The mechanical relay option may better suited for implementations where the existing controller is preserved, due to the NO, NC terminals are both available.  If implementing a standalone, using a Solid State Relay is a great option. Take note of the trigger level for your relays as you will need to set this in the installation (default is active low level triggers).  
   * [Amazon Link - Mechanical Relay](https://www.amazon.com/JBtek-Channel-Module-Arduino-Raspberry/dp/B00KTEN3TM)
   * [Amazon Link - Solid State Relay Active Low](https://www.amazon.com/DollaTek-Level-Trigger-4-Channel-Module/dp/B07DK6P9CV)
   * [Amazon Link - Solid State Relay Active High](https://www.amazon.com/NOYITO-High-level-Automation-Industrial-Modification/dp/B07BLL4HFD)
 * **Resistors** - (3x) 10k ohm resistors for grill RTD and meat probes resistor divider.  You may want to consider getting some decent quality tolerance resistors for this given that accuracy is important(+/1 1%).  I managed to source some pretty accurate dividers.  It was mentioned on Discord by a user(James Cantrell), that using a smaller resistor value for the Primary RTD input (i.e. 1k) and configuring the profile to match this value might be a really good idea.  This, in theory will give you higher accuracy on RTD probes which have a smaller resistance than the typical food probes.  This is true for any PT1000 style probe, including some Pit Boss probes that have a similar resistance.  (1x) 330 Ohm resistor for power selector switch.  (3x) 10k Ohm resistors for optional physical button input, as well as (3x) 1k Ohm resistors.
 * **Micro SD Card** - 4GB or greater is required for Raspberry Pi OS Buster and later.
-* **120V AC to 5VDC Power Supply** - In this particular case it's a 5V5A output which can be connected to the relay as well! 
+* **120V AC to 5VDC Power Supply** - In this particular case it's a 5V5A output which can be connected to the relay as well.  
   * [Amazon Link](https://www.amazon.com/gp/product/B07B111B7Y)
 * **ADS1115** - Popular I2C based 16bit Analog to Digital Converter.  Note: Some have reported strange behavior with the ADS1115 module they have ordered from Amazon with this link.  I ordered some additional ones from this link (on the West Coast of the USA) and they tested just fine.  There is some speculation that some vendors are cutting corners and putting the cheaper ADS1015 on the board instead.  If this is the case, you should be covered with the new modules added for the ADS1015 in the wizard. 
-  * [Amazon Link](https://www.amazon.com/conversor-anal%C3%B3gico-desarrollo-amplificador-unidades/dp/B082QX1RDV)
-* **Molex Connectors** - This is a super critical to making this a seamless integration of the controller.  This basically allows you to easily plug into the existing connections on the smoker.  I would highly recommend purchasing a wire crimping tool, and watch some youtube videos to understand how these connectors work.  Careful not to trim too much off of the leads so that they do not slide through the connector.
+  * [Amazon Link](https://www.amazon.com/HiLetgo-Converter-Programmable-Amplifier-Development/dp/B07VPFLSMX)
+* **Molex Connectors** - This is a super critical to making this a seamless integration of the controller.  This basically allows you to easily plug into the existing connections on the smoker.  I would highly recommend purchasing a ratcheting wire crimping tool, and watch some youtube videos to understand how these connectors work.  Careful not to trim too much off of the leads so that they do not slide through the connector.
   * [Amazon Link](https://www.amazon.com/gp/product/B074G5PQHL)
 * **2.5mm Mono Audio Jack** - I have finally found some very high quality 2.5mm jacks which can be found on ebay, Amazon and other Chinese electronics sites.  These Philmore style jacks in either stereo or mono are excellent and very reliable.  The catch is that they can be quite expensive.  Up to $8/piece.  However, I feel this is worth the price compared to the cheap surface mount options out there.  I have found that there are often better deals for these on ebay and aliexpress.  Search for Philmore.  I recently picked up 10 mono versions of these jacks from ebay for $20 and they work really well.  
   * [Amazon Link](https://www.amazon.com/gp/product/B01M2AZTUQ)  
@@ -35,11 +35,14 @@ PiFire doesn't require a display to be attached, but it is a nice addition to ha
 * **SSD1306** - Standard 1" OLED display with I2C interface (64Hx128W).  It's pretty tiny, but it does the job and it can be found very cheap if you are willing to order direct from China.  This is what was used for the initial/default implementation on the PiFire project. Make sure you get the all-white display and not the two-color (yellow/blue) display.  Example linked below.  (Raspberry Pi I2C Pin Mapping listed below)
   * [Amazon Link](https://www.amazon.com/Hosyond-Display-Self-Luminous-Compatible-Raspberry/dp/B09T6SJBV5/)
 
-* **ILI9341 Based Display** - Many versions of this display are available from different sources.  I've built the ILI9341 support around the 240Hx320W SPI version of this.
+* **ILI9341 Based Display** - Many versions of this display are available from different sources.  I've built the ILI9341 support around the 240Hx320W SPI version of this.  Note that there are currently some 4" versions of this display, but they have a larger resolution and are not currently supported.  
   * [Amazon Link](https://www.amazon.com/Display-Module-240320-4-Wire-Screen/dp/B07KPD4DHD)  (Pin Mapping listed below)
 
 * **ST7789 Based Display** - Again, many revisions of this are available from many different sources.  The specific screen that I have built support on is from Waveshare, with a 240x240 screen and SPI interface. 
   * [Amazon Link](https://www.amazon.com/gp/product/B07MH93747)
+
+* **DSI Touch Display** - In the v1.7.0 release, a DSI Touch based display has been introduced for the Raspberry Pi full sized board.  Note that DSI is not supported by the Pi Zero or Pi Zero 2 boards.  Note that performance may be slow when using this display due to the system requirements for displaying full screen graphics.  
+  * [Amazon Link](https://www.amazon.com/gp/product/B0B455LDKH)
 
 #### Optional Hopper Sensors
 
@@ -152,7 +155,7 @@ For Physical Button Input, the following is an example of how tactile switches c
 * **GPIO 15** - Fan Relay - Controls Fan on/off.
 * **GPIO 18** - Igniter Relay - Controls Igniter on/off.
 
-#####Switch Input (defined in settings.json):
+##### Switch Input (defined in settings.json):
 
 * **GPIO 17** - Switch Input for system on/off
 

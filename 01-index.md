@@ -48,26 +48,27 @@ What I did keep from dborello's project was the PID controller which was the hea
 * Supports several different OLED and LCD screens
 	* SSD1306 OLED Display
 	* ST7789 TFT Display
-	* ILI9341 TFT Display (now with more rotation options)
+	* ILI9341 TFT Display (320x240 resolution only)
+	* DSI Touch Display (**Currently Experimental**) - Requires Raspberry Pi with DSI interface (non-Pi Zero) and is resource heavy, so Pi 3B+ or later recommended 
 * Physical Button Input / Control (depending on the display, three button inputs)
 * Encoder support for, so you can control your grill with a spinny knob.
 * One (1) Grill Probe and Many Food Probes
 	* Tunable probe inputs to allow for many different probe manufacturers
-	* Supports the ADS1115 ADC, ADS1015 ADC, and MAX31865 RTD devices for measuring probes
+	* Supports the ADS1115 ADC, ADS1015 ADC, and MAX31865 RTD devices for measuring probes (Experimental DS18B20 and MCP9600 support added)
 	* Probe tuning tool to help develop probe profiles
-	* NEW - Any number of probe inputs, limited only by the number of devices that the Raspberry Pi can support
-	* Virtual Probes to allow you to do things like averaging probes, finding highest and lowest values of certain probes, etc.  
+	* Any number of probe inputs, limited only by the number of devices that the Raspberry Pi can support
+	* Virtual Probes to allow you to do things like averaging probes, finding highest and lowest values of certain probes, etc.
 * Cook Timer - Moved to the Top Bar for Easy Access
 * Notifications (Grill / Food Probes / Timer)
-	* Supports Apprise, IFTTT, Pushover, and Pushbullet Notification Services
+	* Supports Apprise, IFTTT, Pushover, and Pushbullet Notification Services and now MQTT!
 * Smoke Plus Feature to deliver more smoke during Smoke / Hold modes
 * Safety settings to prevent over-temp, startup failure, or firepot flameout (and overload)
 * Save temperature history for all probes / set points to a cook file that can be updated with images, notes, and even downloaded to your devices.
 * Wood Pellet Tracking Manager - Now includes estimates of pellet usage.
 * Pellet Level Sensor Support
-	* VL53L0X Time of Flight Sensor
+	* VL53L0X Time of Flight Sensor (recommended)
 	* HCSR04 Ultrasonic Sensor
-* Socket IO for Android Application Support _(GitHub User [@weberbox](https://github.com/weberbox) has made a Android client app under development here: [https://github.com/weberbox/PiFire-Android](https://github.com/weberbox/PiFire-Android))_ (NOTE: Due to the large amount of architectural changes in v1.5.0, the Android App update is still in development.  The current version of PiFire has implemented a compatibility layer so that it doesn't break compatibility with the current Android App.  If you have a non-standard probe setup or more than two food probes, you may see issues.  There may still be bugs, so please do submit issues on GitHub if you experience any.)
+* Socket IO for Android Application Support _(GitHub User [@weberbox](https://github.com/weberbox) has made a Android client app under development here: [https://github.com/weberbox/PiFire-Android](https://github.com/weberbox/PiFire-Android))_ 
 * Recipes / Recipe Mode - Integrated recipe creation and a new mode for developing a recipe 'program' that will control the grill for you and follow the recipe that was programmed.  
 * Lid open detection during hold mode to pause the controller and prevent overshoots.  
 * ...And much more!  
@@ -123,7 +124,7 @@ Of course, none of this project would be available without the wonderful and ama
 
 * **PiSmoker** - The project that served as the inspiration for this project and where the PID controller is wholesale borrowed from.  Special mention to Dan for providing encouraging feedback from day one of this project.  Many thanks!  Copyright Dan Borello. [engineeredmusings.com](http://engineeredmusings.com/pismoker/) [github](https://github.com/DBorello/PiSmoker)
 
-* **Circliful** - Beautiful Circle Gauges from the original PiFire.  This script is no longer utilized, but deserves continued recognition.  Extra special mention for Patric for providing great support to me via GitHub.  Copyright Patric Gutersohn & other contributors. [gutersohn.com](http://gutersohn.com/) [github](https://github.com/pguso/js-plugin-circliful)
+* **Circliful** - Beautiful Circle Gauges on the dashboard. Extra special mention for Patric for providing great support to me via GitHub.  Copyright Patric Gutersohn & other contributors. [gutersohn.com](http://gutersohn.com/) [github](https://github.com/pguso/js-plugin-circliful)
 
 * **SVG Gauge** - Credits to Aniket Naik for the excellent SVG-Gauge. Released under the MIT License Copyright (c) 2016 [(github profile)](https://github.com/naikus) [github.com](https://github.com/naikus/svg-gauge)
 
@@ -154,7 +155,7 @@ This project is licensed under the MIT license.
 ```
 MIT License
 
-Copyright (c) 2020 - 2023 Ben Parmeter and Contributors
+Copyright (c) 2020 - 2024 Ben Parmeter and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -173,4 +174,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-``` 
+```
