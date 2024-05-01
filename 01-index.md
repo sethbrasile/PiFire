@@ -147,7 +147,7 @@ Of course, none of this project would be available without the wonderful and ama
 * **Other Adafruit Modules** - Multiple Adafruit modules were also leveraged in the making of this project and deserve recognition, even if they aren't distributed in the project.  
 
 * **Contributions from the Community** - Thank you to those of you who have rolled up your sleeves, built out this project and contributed back. Whether that be with contributions to the code, designing new hardware, ideas and suggestions, or with a coffee that you bought me along the way.  Thank you very much, you keep this project running!
-
+ 
 ### Licensing
 
 This project is licensed under the MIT license.
